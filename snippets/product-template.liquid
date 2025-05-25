@@ -1950,9 +1950,6 @@
 
     {% comment %} === WORKING V2 OVERAGE CALCULATOR === {% endcomment %}
     {% if product.tags contains "overage-popup-v2" %}
-      // DEBUG: Check if V2 is executing
-      alert('V2 DEBUG: Product has overage-popup-v2 tag - V2 code is executing!');
-      
       console.log('✅ V2 SIMPLE: Starting V2 implementation');
       
       // Create V2 overlay
@@ -2784,6 +2781,16 @@
                         
 {% render 'outlink-custom', product:product, o_showOutlink:1, o_hideCart:1 , o_classes: 'relative add_to_cart_button button button-outline disabled:opacity-60 disabled:cursor-not-allowed duration-200 leading-none w-full mb-2 pt-3.5 pb-3.5 md:pt-4 md:pb-4', o_style: '' %}
 <div class="o_original_{{ product.id }}">
+{% if product.tags contains 'overage-popup-v2' %}
+  <script>
+    window.torosOverageV2 = {
+      productTags: {{ product.tags | json }},
+      firstVariantId: {{ product.first_available_variant.id | json }},
+      tilesPerBox: {{ product.metafields.custom.tiles_per_box | default: 1 | json }}
+    };
+  </script>
+  {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}
+{% endif %}
 <div id="atc-btn-wrap">
                         <button
                           id="x-atc-button-{{ section.id }}"
@@ -4713,3 +4720,14 @@
         </div>
       </div>
     {%- else -%}
+
+{% if product.tags contains 'overage-popup-v2' %}
+  <script>
+    window.torosOverageV2 = {
+      productTags: {{ product.tags | json }},
+      firstVariantId: {{ product.first_available_variant.id | json }},
+      tilesPerBox: {{ product.metafields.custom.tiles_per_box | default: 1 | json }}
+    };
+  </script>
+  {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}
+{% endif %}
