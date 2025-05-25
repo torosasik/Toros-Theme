@@ -354,261 +354,299 @@
 {% endif %}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Ensure this script only runs if the V2 popup HTML is actually on the page
-  const v2Popup = document.getElementById('toros-v2-ovg-popup');
-  if (!v2Popup) {
-    return; // V2 popup not present, do nothing
-  }
-
-  let overageSetV2 = false;
-  // const atcButtonSelector = '#x-atc-button-{{ section.id }}'; // Main Add to Cart button selector
-  const v2_product_price = {{ v2_product_price | divided_by: 100.00 }};
-  const v2_box_dimensions = {{ v2_box_area_clean | default: 0 }};
-  const v2_tiles_per_box = {{ v2_tiles_per_box | default: 1 }};
-  const v2_max_allowed_qty = {{ v2_max_qty | default: 10000 }};
-
-  // --- Start: Overage V2 Pop-up Trigger via Add to Cart Button ---
-  const atcButtonSelectorById = '#x-atc-button-{{ section.id }}';
-  let mainATCButton = document.querySelector(atcButtonSelectorById);
-  console.log('Toros V2: Attempting to find ATC button. Expected section.id: {{ section.id }}');
-  console.log('Toros V2: ATC button selector by ID:', atcButtonSelectorById);
-
-  if (mainATCButton) {
-    console.log('Toros V2: Found ATC button by ID:', mainATCButton);
-  } else {
-    console.log('Toros V2: ATC button NOT found by ID. Trying generic selectors...');
-    mainATCButton = document.querySelector('form[data-type="add-to-cart-form"] button[type="submit"][name="add"]');
-    if (mainATCButton) {
-      console.log('Toros V2: Found ATC button by generic form selector (form[data-type="add-to-cart-form"] button[type="submit"][name="add"]):', mainATCButton);
-    } else {
-      mainATCButton = document.querySelector('button.add_to_cart_button[name="add"]');
-      if (mainATCButton) {
-        console.log('Toros V2: Found ATC button by class selector (.add_to_cart_button[name="add"]):', mainATCButton);
-      } else {
-        mainATCButton = document.querySelector('#add'); // Fallback for very simple ID if name="add" is an ID
-        if (mainATCButton && mainATCButton.type === 'submit') {
-           console.log('Toros V2: Found ATC button by ID #add:', mainATCButton);
-        } else {
-           mainATCButton = document.querySelector('button[name="add"]'); // General name selector
-            if (mainATCButton) {
-                console.log('Toros V2: Found ATC button by name="add":', mainATCButton);
-            } else {
-                console.error('Toros V2: Main ATC button not found with any selector. Overage V2 pop-up will NOT trigger.');
-                return; // Exit if no button is found
-            }
-        }
-      }
-    }
-  }
-
-  // This logic assumes the product has the 'overage-popup-v2' tag (checked by the outer Liquid if statement)
-  // const mainATCButton = document.querySelector(atcButtonSelector); No longer needed here
-  if (mainATCButton && mainATCButton.parentElement) {
-    const overlayV2 = document.createElement('div');
-    overlayV2.id = 'toros-v2-overage-submit';
-    mainATCButton.parentElement.style.position = 'relative'; // Ensure parent can host absolute overlay
-    mainATCButton.parentElement.appendChild(overlayV2);
-
-    overlayV2.addEventListener('click', function(e) {
-      e.preventDefault(); // Prevent any default action
-      e.stopPropagation(); // Stop event from bubbling to the actual ATC button immediately
-      
-      const currentSqFtInput = document.getElementById('squared_size');
-      const v2CalculatorFootageInput = document.getElementById('toros-v2-ovg-calculator-footage');
-      if (currentSqFtInput && v2CalculatorFootageInput) {
-          v2CalculatorFootageInput.value = currentSqFtInput.value;
-      }
-
-      if (!overageSetV2) {
-        document.documentElement.classList.add('toros-v2-overflow-pop-hidden');
-        v2Popup.classList.add('toros-v2-ovg-popup-open');
-      } else {
-        // Overage V2 already set, proceed to click the real ATC button
-        if(mainATCButton.click) {
-            mainATCButton.click();
-        } else { // Fallback for some environments or button types
-            mainATCButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        }
-      }
-    });
-  }
-  // --- End: Overage V2 Pop-up Trigger ---
-
-  // --- Start: V2 Pop-up Event Listeners (Close, Manual Input Radio) ---
-  const v2PopupContent = document.getElementById('toros-v2-ovg-popup-content');
-  const v2CloseButton = document.getElementById('toros-v2-ovg-popup-close');
-
-  if (v2CloseButton) {
-    v2CloseButton.addEventListener('click', function() {
-      v2Popup.classList.remove('toros-v2-ovg-popup-open');
-      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
-    });
-  }
-
-  // Close popup if clicked outside content area
-  v2Popup.addEventListener('click', function(event) {
-    if (v2PopupContent && !v2PopupContent.contains(event.target)) {
-      v2Popup.classList.remove('toros-v2-ovg-popup-open');
-      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
-    }
-  });
-
-  document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
-    radio.addEventListener('change', function () {
-      const manualInputFieldV2 = document.getElementById('toros-v2-manual-ovg-input');
-      if (this.value === 'manual') {
-        manualInputFieldV2.style.display = 'block'; // Use block for centering
-        document.getElementById('toros-v2-manualInputFieldOVG').focus();
-      } else {
-        manualInputFieldV2.style.display = 'none';
-      }
-    });
-  });
-  // --- End: V2 Pop-up Event Listeners ---
-
-  // --- Start: V2 Calculation Logic ---
-  function roundUpV2(num, decimalPlaces) {
-    const factor = Math.pow(10, decimalPlaces);
-    return Math.ceil(num * factor) / factor;
-  }
-
-  function updatePropertyFieldsV2(quantity, sqft, pieces) {
-    const propertyQtyEl = document.querySelector('input[name="properties[QTY_V2]"]');
-    const propertySqftEl = document.querySelector('input[name="properties[SQFT_V2]"]');
-    const propertyPiecesEl = document.querySelector('input[name="properties[PIECES_V2]"]');
-    // It's better to create these hidden fields if they don't exist yet.
-    // For now, assuming they might be added elsewhere or this is just for data prep.
-  }
+// Use an immediately invoked function expression (IIFE) to execute immediately, regardless of DOM state
+(function() {
+  console.log('Toros V2: Script initializing...');
   
-  function updateV2CalculatorOutputs(boxes, footageWithOverage, totalCost) {
-      document.getElementById('toros-v2-ovg-boxes').value = boxes;
-      document.getElementById('toros-v2-ovg-solution').value = footageWithOverage.toFixed(2);
-      document.getElementById('toros-v2-ovg-total_coverage').value = (boxes * v2_box_dimensions).toFixed(2);
-      document.getElementById('toros-v2-ovg-total_cost').value = '$ ' + totalCost.toFixed(2);
-  }
-
-  function calculateOverageV2() {
-    if (v2_box_dimensions <= 0) {
-        alert('Product box dimensions are not configured correctly.');
-        return;
-    }
-    let calculator_footage = parseFloat(document.getElementById('toros-v2-ovg-calculator-footage').value) || 0;
-    if (calculator_footage <= 0) {
-        alert('Please enter the square footage you want to cover.');
-        document.getElementById('toros-v2-ovg-calculator-footage').focus();
-        return;
-    }
-
-    let selectedOverageRadio = document.querySelector('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]:checked');
-    let overagePercent = 0;
-
-    if (selectedOverageRadio) {
-        if (selectedOverageRadio.value === 'manual') {
-            overagePercent = parseFloat(document.getElementById('toros-v2-manualInputFieldOVG').value) / 100 || 0;
-        } else if (selectedOverageRadio.value !== 'no_overage') {
-            overagePercent = parseFloat(selectedOverageRadio.value) || 0;
-        }
-    }
-    if (overagePercent < 0) overagePercent = 0; // Ensure non-negative overage
-
-    let footageIncludingOverage = calculator_footage * (1 + overagePercent);
-    let boxes_needed = Math.ceil(footageIncludingOverage / v2_box_dimensions);
-    
-    if (v2_tiles_per_box <= 0) v2_tiles_per_box = 1; // Avoid division by zero for pieces
-
-    if (boxes_needed > v2_max_allowed_qty) {
-        alert("Only " + v2_max_allowed_qty + " available. Adjusting quantity.");
-        boxes_needed = v2_max_allowed_qty;
-        footageIncludingOverage = boxes_needed * v2_box_dimensions / (1 + overagePercent); // Recalculate approx. base footage
-    }
-    
-    let total_cost = v2_product_price * boxes_needed;
-    let actual_total_coverage = boxes_needed * v2_box_dimensions;
-
-    updateV2CalculatorOutputs(boxes_needed, footageIncludingOverage, total_cost);
-
-    // Update main page quantity input (assuming ID 'quantity_look_alike' and 'squared_size' from V1 context)
-    const quantityLookAlikeEl = document.getElementById('quantity_look_alike');
-    const squaredSizeEl = document.getElementById('squared_size');
-    const mainQuantityEl = document.querySelector('input[name="quantity"]');
-
-    if (quantityLookAlikeEl) quantityLookAlikeEl.value = boxes_needed;
-    if (squaredSizeEl) squaredSizeEl.value = actual_total_coverage.toFixed(2);
-    if (mainQuantityEl) mainQuantityEl.value = boxes_needed;
-    
-    // Update hidden property for overage percentage if it exists for form submission
-    const propertyOverageV2 = document.querySelector('input[name="properties[OVERAGE_PERCENT_V2]"]');
-    if (propertyOverageV2) {
-        propertyOverageV2.value = (overagePercent * 100).toFixed(0) + '%';
-    }
-
-    // Also create/update TOROS_V2_OVERAGE and TOROS_V2_OVERAGE_MANUAL based on selection
-    // This ensures the selected radio/manual input value is part of the form properties
-    // (Handled by the radio button names `properties[...]` themselves)
-
-    overageSetV2 = true;
-    const overlayV2 = document.getElementById('toros-v2-overage-submit');
-    // No need to remove the overlay, its click logic now handles the overageSetV2 flag
-  }
-
-  const calculateBtnV2 = document.getElementById('toros-v2-ovg-calculate');
-  if (calculateBtnV2) {
-    calculateBtnV2.addEventListener('click', function(e){
-      e.preventDefault();
-      calculateOverageV2();
-    });
-  }
-  // --- End: V2 Calculation Logic ---
-
-  // --- Start: V2 Add to Cart from Pop-up ---
-  const addToCartBtnV2 = document.getElementById('toros-v2-ovg-addToquanitity');
-  if (addToCartBtnV2) {
-    addToCartBtnV2.addEventListener('click', function(e){
-      e.preventDefault();
-      let calculated_boxes = parseFloat(document.getElementById('toros-v2-ovg-boxes').value) || 0;
-
-      if (calculated_boxes <= 0) {
-        alert("Please calculate the required quantity first.");
-        return;
+  // Function to initialize the V2 calculator
+  function initTorosV2Calculator() {
+    try {
+      console.log('Toros V2: Starting initialization...');
+      
+      // Ensure this script only runs if the V2 popup HTML is actually on the page
+      const v2Popup = document.getElementById('toros-v2-ovg-popup');
+      if (!v2Popup) {
+        console.log('Toros V2: Popup element not found, exiting');
+        return; // V2 popup not present, do nothing
       }
-      if (calculated_boxes > v2_max_allowed_qty) {
-         alert("Only " + v2_max_allowed_qty + " available. Please adjust.");
-         return;
+
+      console.log('Toros V2: Popup element found, continuing...');
+
+      let overageSetV2 = false;
+      // JavaScript variables from Liquid
+      const v2_product_price = {{ v2_product_price | divided_by: 100.00 }};
+      const v2_box_dimensions = {{ v2_box_area_clean | default: 0 }};
+      const v2_tiles_per_box = {{ v2_tiles_per_box | default: 1 }};
+      const v2_max_allowed_qty = {{ v2_max_qty | default: 10000 }};
+
+      console.log('Toros V2: Configuration loaded - Price:', v2_product_price, 'Box Dimensions:', v2_box_dimensions, 'Tiles per box:', v2_tiles_per_box, 'Max qty:', v2_max_allowed_qty);
+
+      // --- Start: Overage V2 Pop-up Trigger via Add to Cart Button ---
+      const atcButtonSelectorById = '#x-atc-button-{{ section.id }}';
+      let mainATCButton = document.querySelector(atcButtonSelectorById);
+      console.log('Toros V2: Attempting to find ATC button. Expected section.id: {{ section.id }}');
+      console.log('Toros V2: ATC button selector by ID:', atcButtonSelectorById);
+
+      if (mainATCButton) {
+        console.log('Toros V2: Found ATC button by ID:', mainATCButton);
+      } else {
+        console.log('Toros V2: ATC button NOT found by ID. Trying generic selectors...');
+        
+        // Multiple fallback selectors
+        const selectors = [
+          'form[data-type="add-to-cart-form"] button[type="submit"][name="add"]',
+          'button.add_to_cart_button[name="add"]',
+          'button[name="add"]',
+          '#add',
+          '.btn.product-form__cart-submit',
+          'button[type="submit"].btn',
+          '.product-form__buttons button[type="submit"]'
+        ];
+        
+        for (let selector of selectors) {
+          mainATCButton = document.querySelector(selector);
+          if (mainATCButton) {
+            console.log('Toros V2: Found ATC button with selector "' + selector + '":', mainATCButton);
+            break;
+          }
+        }
+        
+        if (!mainATCButton) {
+          console.error('Toros V2: Main ATC button not found with any selector. Available buttons:');
+          console.log(document.querySelectorAll('button'));
+          return; // Exit if no button is found
+        }
+      }
+
+      // This logic assumes the product has the 'overage-popup-v2' tag (checked by the outer Liquid if statement)
+      if (mainATCButton && mainATCButton.parentElement) {
+        const overlayV2 = document.createElement('div');
+        overlayV2.id = 'toros-v2-overage-submit';
+        mainATCButton.parentElement.style.position = 'relative'; // Ensure parent can host absolute overlay
+        mainATCButton.parentElement.appendChild(overlayV2);
+        
+        console.log('Toros V2: Overlay created and attached to ATC button');
+
+        overlayV2.addEventListener('click', function(e) {
+          console.log('Toros V2: Overlay clicked');
+          e.preventDefault(); // Prevent any default action
+          e.stopPropagation(); // Stop event from bubbling to the actual ATC button immediately
+          
+          const currentSqFtInput = document.getElementById('squared_size');
+          const v2CalculatorFootageInput = document.getElementById('toros-v2-ovg-calculator-footage');
+          if (currentSqFtInput && v2CalculatorFootageInput) {
+              v2CalculatorFootageInput.value = currentSqFtInput.value;
+              console.log('Toros V2: Pre-filled footage from squared_size:', currentSqFtInput.value);
+          }
+
+          if (!overageSetV2) {
+            console.log('Toros V2: Opening popup (overage not set)');
+            document.documentElement.classList.add('toros-v2-overflow-pop-hidden');
+            v2Popup.classList.add('toros-v2-ovg-popup-open');
+          } else {
+            console.log('Toros V2: Overage already set, proceeding to ATC');
+            // Overage V2 already set, proceed to click the real ATC button
+            if(mainATCButton.click) {
+                mainATCButton.click();
+            } else { // Fallback for some environments or button types
+                mainATCButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            }
+          }
+        });
+      }
+      // --- End: Overage V2 Pop-up Trigger ---
+
+      // --- Start: V2 Pop-up Event Listeners (Close, Manual Input Radio) ---
+      const v2PopupContent = document.getElementById('toros-v2-ovg-popup-content');
+      const v2CloseButton = document.getElementById('toros-v2-ovg-popup-close');
+
+      if (v2CloseButton) {
+        v2CloseButton.addEventListener('click', function() {
+          console.log('Toros V2: Close button clicked');
+          v2Popup.classList.remove('toros-v2-ovg-popup-open');
+          document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+        });
+      }
+
+      // Close popup if clicked outside content area
+      v2Popup.addEventListener('click', function(event) {
+        if (v2PopupContent && !v2PopupContent.contains(event.target)) {
+          console.log('Toros V2: Clicked outside popup, closing');
+          v2Popup.classList.remove('toros-v2-ovg-popup-open');
+          document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+        }
+      });
+
+      // Manual input radio button handling
+      document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+          const manualInputFieldV2 = document.getElementById('toros-v2-manual-ovg-input');
+          if (this.value === 'manual') {
+            manualInputFieldV2.style.display = 'block'; // Use block for centering
+            document.getElementById('toros-v2-manualInputFieldOVG').focus();
+          } else {
+            manualInputFieldV2.style.display = 'none';
+          }
+        });
+      });
+      // --- End: V2 Pop-up Event Listeners ---
+
+      // --- Start: V2 Calculation Logic ---
+      function roundUpV2(num, decimalPlaces) {
+        const factor = Math.pow(10, decimalPlaces);
+        return Math.ceil(num * factor) / factor;
+      }
+
+      function updatePropertyFieldsV2(quantity, sqft, pieces) {
+        const propertyQtyEl = document.querySelector('input[name="properties[QTY_V2]"]');
+        const propertySqftEl = document.querySelector('input[name="properties[SQFT_V2]"]');
+        const propertyPiecesEl = document.querySelector('input[name="properties[PIECES_V2]"]');
+        // It's better to create these hidden fields if they don't exist yet.
+        // For now, assuming they might be added elsewhere or this is just for data prep.
       }
       
-      // Ensure overage has been considered and values are set
-      if (!overageSetV2) {
-        calculateOverageV2(); // Recalculate to be sure, or prompt user
-        if (!overageSetV2) { // If still not set (e.g. validation failed in calc)
-            alert("Please complete the overage calculation.");
+      function updateV2CalculatorOutputs(boxes, footageWithOverage, totalCost) {
+          document.getElementById('toros-v2-ovg-boxes').value = boxes;
+          document.getElementById('toros-v2-ovg-solution').value = footageWithOverage.toFixed(2);
+          document.getElementById('toros-v2-ovg-total_coverage').value = (boxes * v2_box_dimensions).toFixed(2);
+          document.getElementById('toros-v2-ovg-total_cost').value = '$ ' + totalCost.toFixed(2);
+      }
+
+      function calculateOverageV2() {
+        console.log('Toros V2: Calculate function called');
+        if (v2_box_dimensions <= 0) {
+            alert('Product box dimensions are not configured correctly.');
             return;
         }
+        let calculator_footage = parseFloat(document.getElementById('toros-v2-ovg-calculator-footage').value) || 0;
+        if (calculator_footage <= 0) {
+            alert('Please enter the square footage you want to cover.');
+            document.getElementById('toros-v2-ovg-calculator-footage').focus();
+            return;
+        }
+
+        let selectedOverageRadio = document.querySelector('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]:checked');
+        let overagePercent = 0;
+
+        if (selectedOverageRadio) {
+            if (selectedOverageRadio.value === 'manual') {
+                overagePercent = parseFloat(document.getElementById('toros-v2-manualInputFieldOVG').value) / 100 || 0;
+            } else if (selectedOverageRadio.value !== 'no_overage') {
+                overagePercent = parseFloat(selectedOverageRadio.value) || 0;
+            }
+        }
+        if (overagePercent < 0) overagePercent = 0; // Ensure non-negative overage
+
+        let footageIncludingOverage = calculator_footage * (1 + overagePercent);
+        let boxes_needed = Math.ceil(footageIncludingOverage / v2_box_dimensions);
+        
+        if (v2_tiles_per_box <= 0) v2_tiles_per_box = 1; // Avoid division by zero for pieces
+
+        if (boxes_needed > v2_max_allowed_qty) {
+            alert("Only " + v2_max_allowed_qty + " available. Adjusting quantity.");
+            boxes_needed = v2_max_allowed_qty;
+            footageIncludingOverage = boxes_needed * v2_box_dimensions / (1 + overagePercent); // Recalculate approx. base footage
+        }
+        
+        let total_cost = v2_product_price * boxes_needed;
+        let actual_total_coverage = boxes_needed * v2_box_dimensions;
+
+        updateV2CalculatorOutputs(boxes_needed, footageIncludingOverage, total_cost);
+
+        // Update main page quantity input (assuming ID 'quantity_look_alike' and 'squared_size' from V1 context)
+        const quantityLookAlikeEl = document.getElementById('quantity_look_alike');
+        const squaredSizeEl = document.getElementById('squared_size');
+        const mainQuantityEl = document.querySelector('input[name="quantity"]');
+
+        if (quantityLookAlikeEl) quantityLookAlikeEl.value = boxes_needed;
+        if (squaredSizeEl) squaredSizeEl.value = actual_total_coverage.toFixed(2);
+        if (mainQuantityEl) mainQuantityEl.value = boxes_needed;
+        
+        // Update hidden property for overage percentage if it exists for form submission
+        const propertyOverageV2 = document.querySelector('input[name="properties[OVERAGE_PERCENT_V2]"]');
+        if (propertyOverageV2) {
+            propertyOverageV2.value = (overagePercent * 100).toFixed(0) + '%';
+        }
+
+        overageSetV2 = true;
+        console.log('Toros V2: Calculation complete. Boxes needed:', boxes_needed, 'Overage set to true');
       }
-      
-      // Values are set by calculateOverageV2 into main page inputs, close popup and click main ATC
-      v2Popup.classList.remove('toros-v2-ovg-popup-open');
-      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
-      
-      const finalAtcButton = document.querySelector(atcButtonSelectorById);
-      if(finalAtcButton) {
-          if(finalAtcButton.click) {
-              finalAtcButton.click();
-          } else {
-              finalAtcButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+
+      const calculateBtnV2 = document.getElementById('toros-v2-ovg-calculate');
+      if (calculateBtnV2) {
+        calculateBtnV2.addEventListener('click', function(e){
+          e.preventDefault();
+          calculateOverageV2();
+        });
+        console.log('Toros V2: Calculate button listener attached');
+      }
+      // --- End: V2 Calculation Logic ---
+
+      // --- Start: V2 Add to Cart from Pop-up ---
+      const addToCartBtnV2 = document.getElementById('toros-v2-ovg-addToquanitity');
+      if (addToCartBtnV2) {
+        addToCartBtnV2.addEventListener('click', function(e){
+          console.log('Toros V2: Add to cart button clicked');
+          e.preventDefault();
+          let calculated_boxes = parseFloat(document.getElementById('toros-v2-ovg-boxes').value) || 0;
+
+          if (calculated_boxes <= 0) {
+            alert("Please calculate the required quantity first.");
+            return;
           }
+          if (calculated_boxes > v2_max_allowed_qty) {
+             alert("Only " + v2_max_allowed_qty + " available. Please adjust.");
+             return;
+          }
+          
+          // Ensure overage has been considered and values are set
+          if (!overageSetV2) {
+            calculateOverageV2(); // Recalculate to be sure, or prompt user
+            if (!overageSetV2) { // If still not set (e.g. validation failed in calc)
+                alert("Please complete the overage calculation.");
+                return;
+            }
+          }
+          
+          // Values are set by calculateOverageV2 into main page inputs, close popup and click main ATC
+          v2Popup.classList.remove('toros-v2-ovg-popup-open');
+          document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+          
+          console.log('Toros V2: Triggering final ATC button click');
+          if(mainATCButton) {
+              if(mainATCButton.click) {
+                  mainATCButton.click();
+              } else {
+                  mainATCButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+              }
+          }
+        });
+        console.log('Toros V2: Add to cart button listener attached');
       }
-    });
-  }
-  // --- End: V2 Add to Cart from Pop-up ---
+      // --- End: V2 Add to Cart from Pop-up ---
 
-  // Initialize manual input field visibility
-  const v2ManualInputContainer = document.getElementById('toros-v2-manual-ovg-input');
-  document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
-    if (radio.checked && radio.value === 'manual' && v2ManualInputContainer) {
-      v2ManualInputContainer.style.display = 'block';
+      // Initialize manual input field visibility
+      const v2ManualInputContainer = document.getElementById('toros-v2-manual-ovg-input');
+      document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
+        if (radio.checked && radio.value === 'manual' && v2ManualInputContainer) {
+          v2ManualInputContainer.style.display = 'block';
+        }
+      });
+
+      console.log('Toros V2: Initialization complete!');
+      
+    } catch (error) {
+      console.error('Toros V2: Error during initialization:', error);
     }
-  });
+  }
 
-});
+  // Execute immediately if DOM is ready, otherwise wait for it
+  if (document.readyState === 'loading') {
+    console.log('Toros V2: DOM still loading, waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', initTorosV2Calculator);
+  } else {
+    console.log('Toros V2: DOM already loaded, initializing immediately...');
+    initTorosV2Calculator();
+  }
+})();
 </script> 
