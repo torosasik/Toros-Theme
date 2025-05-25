@@ -209,7 +209,18 @@
               class="pb-10 border-b border-solid grid grid-cols-{{ section.settings.products_per_row_on_mobile }} md:grid-cols-2 lg:grid-cols-{{ section.settings.products_per_row_on_desktop }} gap-{{ section.id }} md:list-layout:grid-cols-1"
             >
               
-              {%- for product in collection.products -%}{% comment %}EasylockdownFilterBegin{% endcomment %}{% capture easylockdownFilter %}{% render 'easylockdown_filter_collection' with product, easylockdownRender: true, easylockdownItemSelectorOff: easylockdownItemSelectorOff %}{% endcapture %}{% assign easylockdownFilter = easylockdownFilter | strip %}{% if easylockdownFilter == 'continue' %}{% continue %}{% else %}{{ easylockdownFilter }}{% endif %}{% comment %}EasylockdownFilterEnd{% endcomment %}
+              {%- for product in collection.products -%}
+                {% comment %}EasylockdownFilterBegin{% endcomment %}
+                {% capture easylockdownFilter %}
+                  {% render 'easylockdown_filter_collection' with product, easylockdownRender: true, easylockdownItemSelectorOff: easylockdownItemSelectorOff %}
+                {% endcapture %}
+                {% assign easylockdownFilter = easylockdownFilter | strip %}
+                {% if easylockdownFilter == 'continue' %}
+                  {% continue %}
+                {% else %}
+                  {{ easylockdownFilter }}
+                {% endif %}
+                {% comment %}EasylockdownFilterEnd{% endcomment %}
                 {% liquid
                   assign index = forloop.index
                   if forloop.index < 3
@@ -218,77 +229,18 @@
                     assign loading = 'lazy'
                   endif
                 %}
-                {% for block in section.blocks %}
-                  {% if block.settings.position == index %}
-                    {% liquid
-                      assign col_span = block.settings.number_of_columns
-                      if col_span > section.settings.products_per_row_on_desktop
-                        assign col_span = section.settings.products_per_row_on_desktop
-                      endif
-                      assign col_span_mobile = block.settings.number_of_columns_mobile
-                      if col_span_mobile > section.settings.products_per_row_on_mobile
-                        assign col_span_mobile = section.settings.products_per_row_on_mobile
-                      endif
-                      assign class_tall_mobile = 'col-span-' | append: col_span_mobile | append: ' row-span-' | append: block.settings.number_of_row_mobile
-                      assign class_tall_desktop = 'lg:col-span-' | append: col_span | append: ' lg:row-span-' | append: block.settings.number_of_row
-                      assign col_span = col_span | times: 1.0
-                      assign columns_desktop = section.settings.products_per_row_on_desktop | divided_by: col_span
-                      assign columns_mobile = section.settings.products_per_row_on_mobile | divided_by: col_span_mobile
-                    %}
-                    {% render 'promotion-block',
-                      image_ratio: section.settings.image_ratio,
-                      ratio: 100,
-                      columns_desktop: columns_desktop,
-                      columns_mobile: columns_mobile,
-                      block: block,
-                      enable_desktop_slider: false,
-                      image: block.settings.image,
-                      button_label: block.settings.button_label,
-                      button_link: block.settings.button_link,
-                      open_new_window: block.settings.open_new_window,
-                      content_position: block.settings.content_position,
-                      alignment: block.settings.alignment,
-                      heading: block.settings.heading,
-                      content: block.settings.content,
-                      image_overlay_opacity: block.settings.image_overlay_opacity,
-                      title_size: block.settings.title_size,
-                      text_size: block.settings.text_size,
-                      list_layout: true,
-                      show_button_style: block.settings.show_button_style,
-                      color_button: block.settings.color_button,
-                      color_text_button: block.settings.color_text_button,
-                      color_button_hover: block.settings.color_button_hover,
-                      color_text_button_hover: block.settings.color_text_button_hover,
-                      color_button_secondary: block.settings.color_button_secondary,
-                      secondary_button_text: block.settings.secondary_button_text,
-                      colors_text_link: block.settings.colors_text_link,
-                      class_tall_mobile: class_tall_mobile,
-                      class_tall_desktop: class_tall_desktop,
-                      collection_page: true,
-                      loading: loading,
-                      icon: 'none',
-                      subheading: block.settings.subheading
-                    %}
-                  {% endif %}
-                {% endfor %}
-                <div class="grid-item">
-                  {%
-                    render 'card-product',
+                <div class="product-grid__item">
+                  {% render 'card-product',
                     card_product: product,
-                    media_aspect_ratio: section.settings.image_ratio,
                     show_vendor: section.settings.show_vendor,
                     show_rating: section.settings.show_rating,
-                    loading: loading,
                     show_quick_add: section.settings.enable_quick_add,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    loading: loading,
                     section_id: section.id,
-                    block_id: forloop.index,
-                    collection: collection,
-                    columns_desktop: section.settings.products_per_row_on_desktop,
-                    column_mobile: section.settings.products_per_row_on_mobile | plus: 0,
-                    disable_quickview: disable_quickview,
-                    collection_page: true,
-                    list_layout: true,
-                    product_card_id: forloop.index
+                    product_card_id: product.id,
+                    index: index
                   %}
                 </div>
               {%- endfor -%}

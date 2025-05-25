@@ -1,0 +1,203 @@
+I want to find out if there is any leftover code in my theme or site files from any of the apps in the list below (these apps are uninstalled).
+
+Instructions:
+
+Do not change anything yet!
+
+Search all theme and code files for any code, scripts, assets, snippets, or references related to the apps listed below.
+
+If you are mostly sure that a piece of code is from one of these uninstalled apps, report it.
+
+If you are unsure, or if the code might be from a different app with similar features that is still installed, skip it for now.
+
+For each app where you find leftover code, tell me:
+
+The name of the app
+
+Which file(s) the code appears in
+
+A short code example or line as proof
+
+Wait for my confirmation before deleting anything!
+
+App List:
+
+A2X – QuickBooks & Xero Sync
+Adoric Pop Ups & Email Popup
+AdRoll Advertising & Marketing
+AfterSell by Rokt
+AfterShip Order Tracking
+AI ChatGPT Description
+AIOD - All-In-1 Discount
+Aiosections - Theme Sections
+ALT Text
+Amazon
+Amazon by Codisto
+Amazon Importer Spreadr App
+Apippa-Custom Price Calculator
+AttributePro
+Attrac
+Avada Pop-ups, Banners
+Badgy : Product Label & Badges
+Bing Shopping
+Bold Product Upsell
+Bold QuickBooks Sync
+BOOSTER SEO
+Booster Page Speed Optimizer
+BSS B2B Solution
+BSS Labels & Badges
+Bunu
+Buy Button
+Bundler
+CBB Shipping Rates
+Catalog Maker by Now In Store
+Circle.us
+ClickShip
+Commerce Sciences
+Combined Listings
+CreatorKit - AI Image & video
+Descartes XPS Ship
+Discount Depot
+Discount Mixer
+Discountly-POS & Tier Discount
+Discounty
+Dr Volume Discounts
+EcomSend Popups
+Easy Lockdown
+EasyFlow
+Easyship - All in One Shipping
+eCommix - Google Sheets Sync
+eBay
+Exportsy Google Sheets Sync
+Extractor for Avalara
+Foursixty Shoppable Social UGC
+FX 3D Season Effects Animation
+Globo Product Option
+GroupBy AI Search & Discovery
+Happy Customers - Free Promotion Bar
+Happy Shoppers - Increase Sales
+Helium AI Product Tags
+Hextom Shipping Bar
+Hoppy Trust Badges
+Houzz
+Hulk Discounts
+Huski Product Sample & memo
+Hyperspeed
+InstaFeed
+Klaviyo: Email Marketing & SMS
+Kit
+Lantern
+LimeSpot Personalizer
+Locksmith
+Mailchimp [Legacy]
+Matrixify
+MeasureUpCalc
+Mini - Product Samples
+Mini:Custom Fields Personalize
+Minmaxify Order Limits
+MPC Unit Pricing Calculator
+Mulwi Feeds
+netParcel
+NS AI Chatbot, Helpdesk & FAQs
+O: Auto Tag & Flow Automation
+O:Request a Quote
+Ongoing SEO
+OmniOne Feeds & Ads
+Omnisend Email Marketing & SMS
+Order Printer (legacy)
+Order Printer Templates
+OrderLogic - Min & Max Limits
+OT: Theme Sections
+Pareto - Volume Discount
+PH Breadcrumbs
+PH MultiCarrier Shipping Label
+PH Ship Rate & Track for FedEx
+Photobear - Photo Optimization
+Pinoculars - Pinterest Conversion Tracking
+PixPix Image Editor
+Plug in SEO
+Plug in Speed
+Popupsmart: Popup, A/B Testing
+Power Tools Filter Menu
+PreOrder Globo
+Price Calculator
+PriceMole
+Pricefy - Price Monitoring
+Pumper Bundles Quantity Breaks
+Quicky
+Quizify - Product Quiz Builder
+ReConvert
+Redirect Pro - 404 SEO
+Return Prime: Order Return
+RevenueHunt Quizzes
+RT: Terms and Conditions Box
+S: Promotions and Upsells
+SA Request a Quote
+Sales & Discounts
+Sample Products ‑‑ Try & Buy
+Sami B2B Lock
+Sami Wholesale
+Searchanise Search & Filter
+Selleasy
+Sense Announcement
+SEO Image Optimizer Wizard
+Seo Assistant by Buymaxx
+Shippo - Simplified Shipping
+ShipRobot - Shipping Labels
+ShipX - Shipping Rates & Rules
+Shopacado Discounts
+ShopGuard
+ShopiCraft
+Smart Metafield Collections
+Smart Product Filter & Search
+SmartViewer: Quick View
+SnapBundle
+SpeedBoostr:Google
+StoreSEO
+Swatch King
+Syncly Orders To Google Sheets
+TableFlow - Spec Table
+Tagify - Customer & Orders Tag
+Tada Pop up Spin Wheel Popups
+TaxJar Sales Tax Automation
+Textbox by Textify
+TinySEO
+tinyAlbert: GPT Marketing
+Ultimate Purchase Orders
+Unlisted
+VF Image Resizer+
+Veeqo
+Vidoo
+Video Ad Machine
+Vimeo Create - Video Maker
+VO Product Options
+Volume Discount by Hubify
+Warnify Pro Warnings
+Webrex Announcement
+Whatmore Shoppable Videos
+Wholesale - All in one
+Wholesale B2B & D2C
+Wholesale Discount Pro
+Wholesale GOAT: B2B Pricing
+Wholesale Pricing Discount
+Wholesale Pricing Now: B2B
+Yahoo Product Ads
+Yanet Volume Discount
+Zotabox Social Sharing Buttons
+
+Example Output:
+
+App: Matrixify
+
+File: snippets/matrixify.liquid
+
+Example: {% include 'matrixify' %}
+
+App: PriceMole
+
+File: assets/pricemole.js
+
+Example: src="https://pricemole.com/widget.js"
+
+Just report what you find and wait for my confirmation. Do NOT delete anything yet.
+

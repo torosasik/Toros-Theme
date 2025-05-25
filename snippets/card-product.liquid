@@ -1,5 +1,5 @@
 {% comment %}
-  Renders a product card
+  Renders a product card with optimized image loading
 
   Accepts:
   - card_product: {Object} Product Liquid object (optional)
@@ -160,103 +160,62 @@
                 (min-width: {{ settings.page_width }}px) {% if enable_desktop_slider %}{{ settings.page_width | plus: 100 | divided_by: columns_desktop }}px{% else %}calc(100vw / {{ columns_desktop }}){% endif %}, (min-width: 1024px) calc((100vw) / {{ columns_desktop }}), (min-width: 768px) calc((100vw) / 2), calc(100vw /{{ column_mobile }})
               {%- endif -%}
             {%- endcapture -%}
-          {%- if loading == 'eager' -%}
-            <div class="hidden">
-              {% assign featured_media_alt = card_product.featured_media.alt | split: '#' | first | escape %}
-              {{
-                card_product.featured_media
-                | image_url: width: 1500
-                | image_tag:
-                  widths: '375, 450, 750, 900, 1100, 1500',
-                  preload: true,
-                  loading: 'lazy',
-                  sizes: sizes,
-                  alt: featured_media_alt
-              }}
-            </div>
-          {%- endif -%}
-          <div class="w-full{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}{% if settings.product_image_type != "slide_img" or countMedia <= 1 or class_slide == 'recommendations'  %} top-0 left-0 absolute{% else %} overflow-hidden splide__slide x-splide-slide max-h-full{% endif %} duration-300 z-0 transition ease-out">
-            {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-            <picture>
-              <img
-                srcset="
-                  {{ card_product.featured_media | image_url: width: 450 }} 450w,
-                  {{ card_product.featured_media | image_url: width: 750 }} 750w,
-                  {{ card_product.featured_media | image_url: width: 900 }} 900w,
-                  {{ card_product.featured_media | image_url: width: 1100 }} 1100w,
-                  {{ card_product.featured_media | image_url: width: 1500 }} 1500w
-                  {% if card_product.featured_media.width %},{{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w{% endif %}
-                "
-                src="{{ card_product.featured_media | image_url: width: 1500 }}"
-                sizes="{{ sizes }}"
-                alt="{{ card_product.featured_media.alt | split: "#" | first | escape }}"
-                class="w-full preview-img motion-reduce aspect-{{ media_aspect_ratio }} relative{% if media_aspect_ratio != "natural" %} h-full min-h-full{% endif %} object-cover{% if card_product.media[1] != nil and settings.product_image_type == 'hover_to_reveal_second_image' %} image-first-hover opacity-100 group-hover:opacity-0{% elsif settings.product_image_type != 'slide_img' %} image-hover{%- endif -%}"
-                loading="{{ loading | default: 'lazy' }}"
-                width="{{ card_product.featured_media.width }}"
-                height="{{ card_product.featured_media.height }}"
-              >
-            </picture>
-            {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
-          </div>
-          {%- if card_product.media[1] != null -%}
-            {%- if settings.product_image_type == 'hover_to_reveal_second_image' -%}
-              <div class="w-full h-full top-0 left-0 absolute duration-300 z-0 transition ease-out">
-                <picture>
-                  <img
-                    srcset="
-                      {{ card_product.media[1] | image_url: width: 450 }} 450w,
-                      {{ card_product.media[1] | image_url: width: 750 }} 750w,
-                      {{ card_product.media[1] | image_url: width: 900 }} 900w,
-                      {{ card_product.media[1] | image_url: width: 1100 }} 1100w,
-                      {{ card_product.media[1] | image_url: width: 1500 }} 1500w
-                      {% if card_product.media[1].width %},{{ card_product.media[1] | image_url }} {{ card_product.media[1].width }}w{% endif %}
-                    "
-                    src="{{ card_product.media[1] | image_url: width: 1500 }}"
-                    sizes="{{ sizes }}" object-contain
-                    alt="{{ card_product.media[1].alt | split: "#" | first | escape }}"
-                    class="motion-reduce{% if media_aspect_ratio == "natural" %} aspect-auto{% endif %} min-w-full h-full object-cover group-hover:cursor-pointer image-second-hover opacity-0 group-hover:opacity-100"
-                    loading="lazy"
-                    width="{{ card_product.media[1].width }}"
-                    height="{{ card_product.media[1].height }}"
-                  >
-                </picture>
+            {%- if loading == 'eager' -%}
+              <div class="hidden">
+                {% assign featured_media_alt = card_product.featured_media.alt | split: '#' | first | escape %}
+                {% render 'optimized-image',
+                  image: card_product.featured_media,
+                  width: 1500,
+                  height: 1500,
+                  loading: 'eager',
+                  alt: featured_media_alt,
+                  class: 'w-full preview-img motion-reduce aspect-' | append: media_aspect_ratio | append: ' relative' | append: media_aspect_ratio != "natural" ? ' h-full min-h-full' : '' | append: ' object-cover' | append: card_product.media[1] != nil and settings.product_image_type == 'hover_to_reveal_second_image' ? ' image-first-hover opacity-100 group-hover:opacity-0' : settings.product_image_type != 'slide_img' ? ' image-hover' : ''
+                %}
               </div>
-            {%- elsif settings.product_image_type == 'slide_img'
-              and countMedia > 1
-              and class_slide != 'recommendations'
-            -%}
-              {% for media in card_product.media %}
-                {%- if forloop.index > 1 -%}
-                  <div class="media-slide w-full splide__slide x-splide-slide duration-300 z-0 transition ease-out{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}">
-                    <picture>
-                      <img
-                        srcset="
-                          {{ media | image_url: width: 450 }} 450w,
-                          {{ media | image_url: width: 750 }} 750w,
-                          {{ media | image_url: width: 900 }} 900w,
-                          {{ media | image_url: width: 1100 }} 1100w,
-                          {{ media | image_url: width: 1500 }} 1500w
-                          {% if media.width %},{{ media | image_url }} {{ media.width }}w{% endif %}
-                        "
-                        src="{{ media | image_url: width: 1500 }}"
-                        sizes="{{ sizes }}"
-                        alt="{{ media.alt | split: "#" | first | escape }}"
-                        class="w-full motion-reduce{% if media_aspect_ratio == "natural" %} aspect-auto{% else %} h-full min-h-full{% endif %} object-cover"
-                        loading="lazy"
-                        width="{{ media.width }}"
-                        height="{{ media.height }}"
-                      >
-                    </picture>
-                  </div>
-                {% endif %}
-              {% endfor %}
+            {%- endif -%}
+            <div class="w-full{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}{% if settings.product_image_type != "slide_img" or countMedia <= 1 or class_slide == 'recommendations'  %} top-0 left-0 absolute{% else %} overflow-hidden splide__slide x-splide-slide max-h-full{% endif %} duration-300 z-0 transition ease-out">
+              {% render 'optimized-image',
+                image: card_product.featured_media,
+                width: 1500,
+                height: 1500,
+                loading: loading | default: 'lazy',
+                alt: card_product.featured_media.alt | split: "#" | first | escape,
+                class: 'w-full preview-img motion-reduce aspect-' | append: media_aspect_ratio | append: ' relative' | append: media_aspect_ratio != "natural" ? ' h-full min-h-full' : '' | append: ' object-cover' | append: card_product.media[1] != nil and settings.product_image_type == 'hover_to_reveal_second_image' ? ' image-first-hover opacity-100 group-hover:opacity-0' : settings.product_image_type != 'slide_img' ? ' image-hover' : ''
+              %}
+            </div>
+            {%- if card_product.media[1] != null -%}
+              {%- if settings.product_image_type == 'hover_to_reveal_second_image' -%}
+                <div class="w-full h-full top-0 left-0 absolute duration-300 z-0 transition ease-out">
+                  {% render 'optimized-image',
+                    image: card_product.media[1],
+                    width: 1500,
+                    height: 1500,
+                    loading: 'lazy',
+                    alt: card_product.media[1].alt | split: "#" | first | escape,
+                    class: 'motion-reduce' | append: media_aspect_ratio == "natural" ? ' aspect-auto' : '' | append: ' min-w-full h-full object-cover group-hover:cursor-pointer image-second-hover opacity-0 group-hover:opacity-100'
+                  %}
+                </div>
+              {%- elsif settings.product_image_type == 'slide_img'
+                and countMedia > 1
+                and class_slide != 'recommendations'
+              -%}
+                {% for media in card_product.media %}
+                  {%- if forloop.index > 1 -%}
+                    <div class="media-slide w-full splide__slide x-splide-slide duration-300 z-0 transition ease-out{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}">
+                      {% render 'optimized-image',
+                        image: media,
+                        width: 1500,
+                        height: 1500,
+                        loading: 'lazy',
+                        alt: media.alt | split: "#" | first | escape,
+                        class: 'w-full motion-reduce' | append: media_aspect_ratio == "natural" ? ' aspect-auto' : ' h-full min-h-full' | append: ' object-cover'
+                      %}
+                    </div>
+                  {%- endif -%}
+                {% endfor %}
+              {%- endif -%}
             {%- endif -%}
           {%- endif -%}
-        {%- else -%}
-          <div class="bg-[#c9c9c9] flex justify-center{% unless media_aspect_ratio == "natural" %} absolute{% endunless %} top-0 left-0 w-full h-full items-center">
-            {%- render 'icon-placeholder', icon: 'icon-product', class: 'w-full h-full' %}
-          </div>
-        {%- endif -%}
         {% if settings.product_image_type == 'slide_img' and countMedia > 1 and class_slide != 'recommendations' %}
           </div>
           </div>

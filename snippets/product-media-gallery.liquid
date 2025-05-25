@@ -1,5 +1,5 @@
 {% comment %}
-  Renders product media gallery
+  Renders product media gallery with optimized image loading
 
   Accepts:
   - product: {Object} Product Liquid object (optional)
@@ -52,7 +52,13 @@
 {%- endcapture -%}
 {%- if lazy_load == false and product.media.first.media_type == 'image' -%}
   <div class="hidden">
-    {{ product.media.first.preview_image | image_url: width: 1780 | image_tag: widths: '375, 450, 750, 900, 1100, 1500, 1780', preload: true, sizes: '50vw' }}
+    {% render 'optimized-image',
+      image: product.media.first.preview_image,
+      width: 1780,
+      height: 1780,
+      loading: 'eager',
+      class: 'preload-image'
+    %}
   </div>
 {%- endif -%}
 <div
@@ -97,14 +103,13 @@
                 class="x-thumbnail relative select-none opacity-100{% if section.settings.thumbnail_position == "horizontal" %} min-w-[50px] md:min-w-[65px] lg:min-w-[85px]{% endif %}"
               >
                 <button class="relative block w-full h-full pb-[100%]{% if rounded_corner_image %} {% unless mobile_media_full %} rounded-[10px]{% endunless %} md:rounded-[10px] overflow-hidden{% endif %}" aria-label="image-thumbnai">
-                  <img
-                    src="{{ media.preview_image | image_url: width: 150 }}"
-                    alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
-                    loading="lazy"
-                    width="{{ media.preview_image.width }}"
-                    height="{{ media.preview_image.height }}"
-                    class="w-full object-cover absolute h-full select-none pointer-events-none"
-                  >
+                  {% render 'optimized-image',
+                    image: media.preview_image,
+                    width: 150,
+                    height: 150,
+                    loading: 'lazy',
+                    class: 'w-full object-cover absolute h-full select-none pointer-events-none'
+                  %}
                   {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
                     <div class="absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 w-6 h-6">
                       <span class="w-6 h-6 inline-block p-1 bg-[rgba(var(--background-color),1)] rounded-full border">
@@ -139,14 +144,13 @@
                 class="x-thumbnail relative select-none opacity-100{% if section.settings.thumbnail_position == "horizontal" %} min-w-[50px] md:min-w-[65px] lg:min-w-[85px]{% endif %}"
               >
                 <button class="relative block w-full h-full pb-[100%]{% if rounded_corner_image %} {% unless mobile_media_full %} rounded-[10px]{% endunless %} md:rounded-[10px] overflow-hidden{% endif %}" aria-label="image-thumbnai">
-                  <img
-                    src="{{ media.preview_image | image_url: width: 150 }}"
-                    alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
-                    loading="lazy"
-                    width="{{ media.preview_image.width }}"
-                    height="{{ media.preview_image.height }}"
-                    class="w-full object-cover absolute h-full select-none pointer-events-none"
-                  >
+                  {% render 'optimized-image',
+                    image: media.preview_image,
+                    width: 150,
+                    height: 150,
+                    loading: 'lazy',
+                    class: 'w-full object-cover absolute h-full select-none pointer-events-none'
+                  %}
                   {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
                     <div class="absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 w-6 h-6">
                       <span class="w-6 h-6 inline-block p-1 bg-[rgba(var(--background-color),1)] rounded-full border">
