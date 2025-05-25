@@ -48,37 +48,23 @@
         aria-label="Image zoom"
         class="block w-full relative overflow-hidden{% if section.settings.image_ratio != "natural" %} h-full {{ ratio }}{% endif %}{% if rounded_corner_image %}{% unless mobile_media_full %} rounded-[10px]{% endunless %} md:rounded-[10px]{% endif %}" >
         {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-        <picture>
-          <source
-            type="image/webp"
-            srcset="{{ media.preview_image | image_url: width: 375, format: 'webp' }} 375w,
-              {{ media.preview_image | image_url: width: 450, format: 'webp' }} 450w,
-              {{ media.preview_image | image_url: width: 750, format: 'webp' }} 750w,
-              {{ media.preview_image | image_url: width: 900, format: 'webp' }} 900w,
-              {{ media.preview_image | image_url: width: 1100, format: 'webp' }} 1100w,
-              {{ media.preview_image | image_url: width: 1500, format: 'webp' }} 1500w,
-              {{ media.preview_image | image_url: width: 1780, format: 'webp' }} 1780w,
-              {{ media.preview_image | image_url: format: 'webp' }} {{ media.preview_image.width }}w"
-            sizes="{{ sizes }}"
-          >
-          <img
-            srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
-              {{ media.preview_image | image_url: width: 450 }} 450w,
-              {{ media.preview_image | image_url: width: 750 }} 750w,
-              {{ media.preview_image | image_url: width: 900 }} 900w,
-              {{ media.preview_image | image_url: width: 1100 }} 1100w,
-              {{ media.preview_image | image_url: width: 1500 }} 1500w,
-              {{ media.preview_image | image_url: width: 1780 }} 1780w,
-              {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
-            src="{{ media.preview_image | image_url: width: 1780 }}"
-            alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
-            sizes="{{ sizes }}"
-            {{ loading }}
-            width="{{ media.preview_image.width }}"
-            height="{{ media.preview_image.height }}"
-            class="duration-300 w-full h-full {% if section.settings.image_ratio != "natural" %} absolute top-0 left-0{% endif %} {% unless section.settings.image_ratio == "natural" %} object-cover {% endunless %}"
-          >
-        </picture>
+        <img
+          srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
+            {{ media.preview_image | image_url: width: 450 }} 450w,
+            {{ media.preview_image | image_url: width: 750 }} 750w,
+            {{ media.preview_image | image_url: width: 900 }} 900w,
+            {{ media.preview_image | image_url: width: 1100 }} 1100w,
+            {{ media.preview_image | image_url: width: 1500 }} 1500w,
+            {{ media.preview_image | image_url: width: 1780 }} 1780w,
+            {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+          src="{{ media.preview_image | image_url: width: 1780 }}"
+          alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
+          sizes="{{ sizes }}"
+          {{ loading }}
+          width="{{ media.preview_image.width }}"
+          height="{{ media.preview_image.height }}"
+          class="duration-300 w-full h-full {% if section.settings.image_ratio != "natural" %} absolute top-0 left-0{% endif %} {% unless section.settings.image_ratio == "natural" %} object-cover {% endunless %}"
+        >
         {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
       </button>
     </div>
@@ -100,37 +86,23 @@
             {{ media | media_tag: image_size: '1024x', autoplay: video_autoplay, loop: section.settings.enable_video_loop, controls: true, loading: 'lazy', class: 'w-full h-full absolute video top-1/2 -translate-y-1/2' }}
             {%- unless video_autoplay -%}
               {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-              <picture>
-                <source
-                  type="image/webp"
-                  srcset="{{ media.preview_image | image_url: width: 375, format: 'webp' }} 375w,
-                    {{ media.preview_image | image_url: width: 450, format: 'webp' }} 450w,
-                    {{ media.preview_image | image_url: width: 750, format: 'webp' }} 750w,
-                    {{ media.preview_image | image_url: width: 900, format: 'webp' }} 900w,
-                    {{ media.preview_image | image_url: width: 1100, format: 'webp' }} 1100w,
-                    {{ media.preview_image | image_url: width: 1500, format: 'webp' }} 1500w,
-                    {{ media.preview_image | image_url: width: 1780, format: 'webp' }} 1780w,
-                    {{ media.preview_image | image_url: format: 'webp' }} {{ media.preview_image.width }}w"
-                  sizes="{{ sizes }}"
-                >
-                <img
-                  srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
-                    {{ media.preview_image | image_url: width: 450 }} 450w,
-                    {{ media.preview_image | image_url: width: 750 }} 750w,
-                    {{ media.preview_image | image_url: width: 900 }} 900w,
-                    {{ media.preview_image | image_url: width: 1100 }} 1100w,
-                    {{ media.preview_image | image_url: width: 1500 }} 1500w,
-                    {{ media.preview_image | image_url: width: 1780 }} 1780w,
-                    {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
-                  src="{{ media.preview_image | image_url: width: 1780 }}"
-                  alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
-                  sizes="{{ sizes }}"
-                  {{ loading }}
-                  width="{{ media.preview_image.width }}"
-                  height="{{ media.preview_image.height }}"
-                  class="img-thumbnail duration-300 absolute w-full h-full object-cover"
-                >
-              </picture>
+              <img
+                srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
+                  {{ media.preview_image | image_url: width: 450 }} 450w,
+                  {{ media.preview_image | image_url: width: 750 }} 750w,
+                  {{ media.preview_image | image_url: width: 900 }} 900w,
+                  {{ media.preview_image | image_url: width: 1100 }} 1100w,
+                  {{ media.preview_image | image_url: width: 1500 }} 1500w,
+                  {{ media.preview_image | image_url: width: 1780 }} 1780w,
+                  {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+                src="{{ media.preview_image | image_url: width: 1780 }}"
+                alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
+                sizes="{{ sizes }}"
+                {{ loading }}
+                width="{{ media.preview_image.width }}"
+                height="{{ media.preview_image.height }}"
+                class="img-thumbnail duration-300 absolute w-full h-full object-cover"
+              >
               {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
               <button 
                 class="button-play absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full p-5 bg-[rgba(var(--image-treatment-text),0.3)] bg-opacity-30 disabled:cursor-not-allowed"
@@ -232,37 +204,23 @@
             </span>
           </div>
           {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-          <picture>
-            <source
-              type="image/webp"
-              srcset="{{ media.preview_image | image_url: width: 375, format: 'webp' }} 375w,
-                {{ media.preview_image | image_url: width: 450, format: 'webp' }} 450w,
-                {{ media.preview_image | image_url: width: 750, format: 'webp' }} 750w,
-                {{ media.preview_image | image_url: width: 900, format: 'webp' }} 900w,
-                {{ media.preview_image | image_url: width: 1100, format: 'webp' }} 1100w,
-                {{ media.preview_image | image_url: width: 1500, format: 'webp' }} 1500w,
-                {{ media.preview_image | image_url: width: 1780, format: 'webp' }} 1780w,
-                {{ media.preview_image | image_url: format: 'webp' }} {{ media.preview_image.width }}w"
-              sizes="{{ sizes }}"
-            >
-            <img
-              srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
-                {{ media.preview_image | image_url: width: 450 }} 450w,
-                {{ media.preview_image | image_url: width: 750 }} 750w,
-                {{ media.preview_image | image_url: width: 900 }} 900w,
-                {{ media.preview_image | image_url: width: 1100 }} 1100w,
-                {{ media.preview_image | image_url: width: 1500 }} 1500w,
-                {{ media.preview_image | image_url: width: 1780 }} 1780w,
-                {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
-              src="{{ media | image_url: width: 1080 }}"
-              {{ loading }}
-              width="{{ media.preview_image.width }}"
-              sizes="{{ sizes }}"
-              height="{{ media.preview_image.width }}"
-              alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
-              class="w-full h-full object-cover"
-            >
-          </picture>
+          <img
+            srcset="{{ media.preview_image | image_url: width: 375 }} 375w,
+              {{ media.preview_image | image_url: width: 450 }} 450w,
+              {{ media.preview_image | image_url: width: 750 }} 750w,
+              {{ media.preview_image | image_url: width: 900 }} 900w,
+              {{ media.preview_image | image_url: width: 1100 }} 1100w,
+              {{ media.preview_image | image_url: width: 1500 }} 1500w,
+              {{ media.preview_image | image_url: width: 1780 }} 1780w,
+              {{ media.preview_image | image_url }} {{ media.preview_image.width }}w"
+            src="{{ media | image_url: width: 1080 }}"
+            {{ loading }}
+            width="{{ media.preview_image.width }}"
+            sizes="{{ sizes }}"
+            height="{{ media.preview_image.width }}"
+            alt="{{ media.preview_image.alt | split: "#" | first | escape }}"
+            class="w-full h-full object-cover"
+          >
           {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
         </button>
         <template>

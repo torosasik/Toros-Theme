@@ -42,48 +42,17 @@
           <parallax-image class="collection-page-banner absolute top-0 left-0 right-0 bottom-0 -z-20">
             <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
               {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-              <picture>
-                <source
-                  srcset="
-                    {{ section.settings.image | image_url: width: 375, format: 'webp' }} 375w,
-                    {{ section.settings.image | image_url: width: 450, format: 'webp' }} 450w,
-                    {{ section.settings.image | image_url: width: 750, format: 'webp' }} 750w,
-                    {{ section.settings.image | image_url: width: 900, format: 'webp' }} 900w,
-                    {{ section.settings.image | image_url: width: 1100, format: 'webp' }} 1100w,
-                    {{ section.settings.image | image_url: width: 1500, format: 'webp' }} 1500w,
-                    {{ section.settings.image | image_url: width: 1780, format: 'webp' }} 1780w,
-                    {{ section.settings.image | image_url: width: 2000, format: 'webp' }} 2000w,
-                    {{ section.settings.image | image_url: width: 3000, format: 'webp' }} 3000w,
-                    {{ section.settings.image | image_url: width: 3840, format: 'webp' }} 3840w
-                  "
-                  type="image/webp"
-                  sizes="100vw"
-                >
-                <img
-                  srcset="
-                    {{ section.settings.image | image_url: width: 375 }} 375w,
-                    {{ section.settings.image | image_url: width: 450 }} 450w,
-                    {{ section.settings.image | image_url: width: 750 }} 750w,
-                    {{ section.settings.image | image_url: width: 900 }} 900w,
-                    {{ section.settings.image | image_url: width: 1100 }} 1100w,
-                    {{ section.settings.image | image_url: width: 1500 }} 1500w,
-                    {{ section.settings.image | image_url: width: 1780 }} 1780w,
-                    {{ section.settings.image | image_url: width: 2000 }} 2000w,
-                    {{ section.settings.image | image_url: width: 3000 }} 3000w,
-                    {{ section.settings.image | image_url: width: 3840 }} 3840w
-                  "
-                  src="{{ section.settings.image | image_url: width: 3840 }}"
-                  sizes="100vw"
-                  alt="{{ section.settings.image.alt | escape }}"
-                  loading="eager"
-                  fetchpriority="high"
-                  decoding="sync"
-                  width="{{ section.settings.image.width }}"
-                  height="{{ section.settings.image.height }}"
-                  class="w-full h-full object-cover"
-                  preload="true"
-                >
-              </picture>
+              {{ section.settings.image | image_url: width: 3840 | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                decoding: 'sync',
+                width: section.settings.image.width,
+                height: section.settings.image.height,
+                sizes: '100vw',
+                widths: '375, 450, 750, 900, 1100, 1500, 1780, 2000, 3000, 3840',
+                class: 'w-full h-full object-cover',
+                preload: true
+              }}
               {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
             </parallax-movement>
           </parallax-image>
