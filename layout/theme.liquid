@@ -10,7 +10,7 @@
     dir="rtl"
   {% endif %}
 >
-
+{% include 'wp-page-speed-optimization-header' %}
 {% comment %}
   <head>
 {% endcomment %}
@@ -53,6 +53,7 @@
       <title>{{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
     {%- endif -%}
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
     {% if template contains "product" %}
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" media="print" onload="this.media='all'">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" defer></script>
@@ -96,10 +97,25 @@
       };
       {% endif %}
       document.addEventListener("DOMContentLoaded", (event) => {
-        // PreOrder code removed
+        document.body.addEventListener("ready.productSamples", function (result) {
+          const preorderBISCheck = document.querySelector('.timesact-button-bis');
+          if (preorderBISCheck) {
+            document.body.addEventListener("afterRenderButton.productSamples", function (result) {
+              const data = result.detail;
+              const sampleButton = data.button;
+              if (sampleButton) {
+                const sampleButtonEl = sampleButton.querySelector('.product-samples-button');
+                if (sampleButtonEl) {
+                  sampleButtonEl.classList.add('sample-disabled');
+                  sampleButtonEl.innerText = 'Sold Out';
+                }
+              }
+            })
+          }
+        });
       });
     </script>
-
+  <script data-custom-wpsob="1" defer>function a(e){const t=e.getBoundingClientRect();return t.top>=0&&t.left>=0&&t.bottom<=(window.innerHeight||document.documentElement.clientHeight)&&t.right<=(window.innerWidth||document.documentElement.clientWidth)}function b(e){e.hasAttribute("data-wpsob-width")&&e.removeAttribute("width"),e.hasAttribute("data-wpsob-height")&&e.removeAttribute("height")}function c(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)a(e[t])&&b(e[t])}function d(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)b(e[t])}window.onload=c,window.addEventListener("scroll",d);</script>  <!--CPC-->
   
   {% if template contains 'product' and customer == nil %}
   <script defer>
@@ -350,7 +366,7 @@
       <script src="{{ 'theme-editor.js' | asset_url }}" defer></script>
     {%- endif -%}
     <script src="{{ 'fancybox.umd.js' | asset_url }}" defer></script>
-    <link rel="stylesheet" href="{{ 'fancybox.css' | asset_url }}" media="print" onload="this.media='all'">
+    <script src="{{ 'fancybox.css' | asset_url }}" defer></script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
     <script src="{{ 'custom.js' | asset_url }}" defer></script>
     <script src="{{ 'vendors.js' | asset_url }}" defer></script>
@@ -378,7 +394,7 @@
     {%- endif -%}
   </body>
 
-
+<!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->
 </html>
 
 

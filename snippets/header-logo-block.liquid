@@ -23,7 +23,7 @@
       <img
         src="{{ section.settings.logo_dark | image_url: width: section.settings.logo_dark.width }}"
         alt="{{ logo_alt }}"
-        sizes="(min-width: 768px) {{ section.settings.logo_width | default: 120 }}px, {{ section.settings.logo_width_mobile | default: 100 }}px"
+        sizes="(min-width: 768px) {{ section.settings.logo_width }}px, {{ section.settings.logo_width_mobile }}px"
         srcset="
           {{ section.settings.logo_dark | image_url: width: 50 }} 50w,
           {{ section.settings.logo_dark | image_url: width: 100 }} 100w,
@@ -35,8 +35,8 @@
           {{ section.settings.logo_dark | image_url: width: 500 }} 500w,
           {{ section.settings.logo_dark | image_url: width: 600 }} 600w
         "
-        width="{{ section.settings.logo_dark.width | default: 120 }}"
-        height="{{ section.settings.logo_dark.height | default: 40 }}"
+        width="{{ section.settings.logo_dark.width }}"
+        height="{{ section.settings.logo_dark.height }}"
         class="header-logo hidden absolute dark:block dark:relative mx-auto{% if logo_above %} md:mx-auto{% else %} md:ml-0{% endif %}"
         loading="lazy"
       >
@@ -50,7 +50,7 @@
       <img
         src="{{ section.settings.logo | image_url: width: section.settings.logo.width }}"
         alt="{{ logo_alt }}"
-        sizes="(min-width: 768px) {{ section.settings.logo_width | default: 120 }}px, {{ section.settings.logo_width_mobile | default: 100 }}px"
+        sizes="(min-width: 768px) {{ section.settings.logo_width }}px, {{ section.settings.logo_width_mobile }}px"
         srcset="
           {{ section.settings.logo | image_url: width: 50 }} 50w,
           {{ section.settings.logo | image_url: width: 100 }} 100w,
@@ -62,8 +62,8 @@
           {{ section.settings.logo | image_url: width: 500 }} 500w,
           {{ section.settings.logo | image_url: width: 600 }} 600w
         "
-        width="{{ section.settings.logo.width | default: 120 }}"
-        height="{{ section.settings.logo.height | default: 40 }}"
+        width="{{ section.settings.logo.width }}"
+        height="{{ section.settings.logo.height }}"
         class="header-logo block dark:hidden dark:absolute mx-auto{% if logo_above %} md:mx-auto{% else %} md:ml-0{% endif %}"
         loading="lazy"
       >

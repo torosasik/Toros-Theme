@@ -689,7 +689,7 @@
                   </div>
                 {% else %}
                   <div class="split-slide-first-{{ block.id }}">
-                    <img loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
                   </div>
                 {% endif %}
               {% else %}
@@ -697,7 +697,7 @@
   
                   {% if block.settings.slide_poster != blank %}
                     <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
-                      <img loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
+                      <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
                     </div>
                   {% elsif block.settings.slide_poster == blank and  block.settings.slide_autoplay == false %}
                     <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
@@ -709,7 +709,7 @@
                     <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
                       <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
                         {% if block.settings.slide_icon != blank %}
-                          <img loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
                         {% else %}
                           <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
                             <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
@@ -764,7 +764,7 @@
                       </div>
                     {% else %}
                       <div class="split-slide-third-{{ block.id }}">
-                        <img loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
+                        <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
                       </div>
                     {% endif %}
                   {% else %}
@@ -772,7 +772,7 @@
       
                       {% if block.settings.secondary_slide_poster != blank %}
                         <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
-                          <img loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
                         </div>
                       {% elsif block.settings.secondary_slide_poster == blank and  block.settings.secondary_slide_autoplay == false %}
                         <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
@@ -784,7 +784,7 @@
                         <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
                           <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
                             {% if block.settings.secondary_slide_icon != blank %}
-                              <img loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
+                              <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
                             {% else %}
                               <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
                                 <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
@@ -841,7 +841,7 @@
                 </div>
               {% else %}
                 <div class="split-slide-image-{{ block.id }} split-slide-first-{{ block.id }}">
-                  <img loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
+                  <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
                 </div>
               {% endif %}
             {% else %}
@@ -849,7 +849,7 @@
 
                 {% if block.settings.slide_poster != blank %}
                   <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
-                    <img loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
                   </div>
                 {% elsif block.settings.slide_poster == blank and  block.settings.slide_autoplay == false %}
                   <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
@@ -861,7 +861,7 @@
                   <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
                     <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
                       {% if block.settings.slide_icon != blank %}
-                        <img loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
+                        <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
                       {% else %}
                         <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
                           <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
@@ -933,7 +933,7 @@
                   </div>
                 {% else %}
                   <div class="split-slide-image-{{ block.id }} split-slide-third-{{ block.id }}">
-                    <img loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
                   </div>
                 {% endif %}
               {% else %}
@@ -941,7 +941,7 @@
   
                   {% if block.settings.secondary_slide_poster != blank %}
                     <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
-                      <img loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
+                      <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
                     </div>
                   {% elsif block.settings.secondary_slide_poster == blank and block.settings.secondary_slide_autoplay == false %}
                     <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
@@ -953,7 +953,7 @@
                     <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
                       <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
                         {% if block.settings.secondary_slide_icon != blank %}
-                          <img loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
                         {% else %}
                           <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
                             <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11

@@ -232,18 +232,18 @@
               <span class="cart-warning text-small pl-5"></span>
             </div>
             <div x-cloak :class="JSON.parse(JSON.stringify(productsBundle)).length > 0 ? 'block': 'hidden'">
-              <div class="bundle-content md:mt-5 pl-5 pr-5 md:pl-0 md:pr-0" :class="JSON.parse(JSON.stringify(productsBundle)).length > 0 && 'mt-5'">
+              <div class="bundler-content md:mt-5 pl-5 pr-5 md:pl-0 md:pr-0" :class="JSON.parse(JSON.stringify(productsBundle)).length > 0 && 'mt-5'">
                 <div class="w-full overflow-hidden">
                   <div class="w-full visible flex flex-row overflow-x-auto md:overflow-x-hidden md:overflow-y-auto scrollbar-body scrollbar-horizontal md:flex-col scrollbar-visible md:max-h-[400px] pb-2">
                     <template x-for="(item,index) in Object.values(productsBundle)" :key="index">
                       <div 
-                        class="md:w-full flex flex-shrink-0 bundle-product relative pt-1.5 pb-1.5 gap-2.5"
+                        class="md:w-full flex flex-shrink-0 bundler-product relative pt-1.5 pb-1.5 gap-2.5"
                         x-data="{ 
                           item: JSON.parse(JSON.stringify(item))
                         }"
                         :class="JSON.parse(JSON.stringify(productsBundle)).length > 1 ? 'w-3/4' : 'w-full'"
                       >
-                        <div class="bundle-product-image w-[70px] h-[70px] relative">
+                        <div class="bundler-product-image w-[70px] h-[70px] relative">
                           <a x-bind:href="item.productUrl" class="block disable-effect w-full">
                             <div class="relative w-full overflow-hidden float-left before:h-0 before:block before:pb-[100.0%]{% if rounded_corner %} rounded-md{% endif %}">
                               <img
@@ -256,11 +256,11 @@
                               <div class="bg-[#c9c9c9] absolute top-0 left-0 w-full h-full" x-show="!item.featured_image">{%- render 'icon-placeholder', icon: 'icon-product', class: 'w-full h-full' %}</div>
                             </div>
                           </a>
-                          <div class="bundle-button-remove cursor-pointer absolute rtl:-left-1.5 rtl:right-auto -top-1.5 pl-1 pr-1 pt-1 pb-1 -right-1.5 text-[rgba(var(--colors-text))] border border-[rgba(var(--colors-text),0.5)] bg-[rgba(var(--background-color))] rounded-full" @click="removeBundle($el, index)">
+                          <div class="bundler-button-remove cursor-pointer absolute rtl:-left-1.5 rtl:right-auto -top-1.5 pl-1 pr-1 pt-1 pb-1 -right-1.5 text-[rgba(var(--colors-text))] border border-[rgba(var(--colors-text),0.5)] bg-[rgba(var(--background-color))] rounded-full" @click="removeBundle($el, index)">
                             <span class="w-2 h-2 block">{% render 'icon-alls', icon: 'icon-close' %}</span>
                           </div>
                         </div>
-                        <div class="bundle-product-text flex-1 pr-2.5 lg:pr-0">
+                        <div class="bundler-product-text flex-1 pr-2.5 lg:pr-0">
                           <div>
                             <a x-bind:href="item.productUrl" class="text-[rgba(var(--colors-heading))] mr-0 duration-200 transition disable-effect hover-text-link p-break-words" x-text="item.product_name">
                             </a>
@@ -274,7 +274,7 @@
               </div>
 
               {% if section.settings.collection.products_count != 0 or section.settings.products != blank %}
-                <div class="bundle-footer pl-5 pr-5 md:pl-0 md:pr-0 mt-1">
+                <div class="bundler-footer pl-5 pr-5 md:pl-0 md:pr-0 mt-1">
                   <div class="mb-5 pt-2.5 flex justify-between text-medium" role="status">
                     <p class="h5 text-[rgba(var(--colors-heading))] text-medium">{{ 'sections.cart.headings.total' | t }}</p>
                     <p x-show="totalDiscount == 0" class="h5 text-[rgba(var(--colors-heading))] text-medium" id="total-price" x-html="totalPrice"></p>
