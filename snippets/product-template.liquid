@@ -4741,3 +4741,19 @@
     console.log('📦 TOROS V2: asset script tag rendered');
   </script>
 {% endif %}
+
+{% if product.tags contains 'overage-popup-v2' %}
+  <script>
+    console.log('🔔 TOROS V2: inline popup script loaded');
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('x-atc-button-{{ section.id }}');
+      if (btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('🛠 TOROS V2 test popup');
+        });
+      }
+    });
+  </script>
+{% endif %}
+<div id="atc-btn-wrap">
