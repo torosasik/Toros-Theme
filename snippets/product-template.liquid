@@ -2783,6 +2783,7 @@
 <div class="o_original_{{ product.id }}">
 {% if product.tags contains 'overage-popup-v2' %}
   <script>
+    console.log('📦 TOROS V2: injecting asset in snippet');
     window.torosOverageV2 = {
       productTags: {{ product.tags | json }},
       firstVariantId: {{ product.first_available_variant.id | json }},
@@ -2790,6 +2791,9 @@
     };
   </script>
   {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}
+  <script>
+    console.log('📦 TOROS V2: asset script tag rendered');
+  </script>
 {% endif %}
 <div id="atc-btn-wrap">
                         <button
@@ -4723,11 +4727,15 @@
 
 {% if product.tags contains 'overage-popup-v2' %}
   <script>
+    console.log('📦 TOROS V2: injecting asset in snippet');
     window.torosOverageV2 = {
       productTags: {{ product.tags | json }},
-      firstVariantId: {{ product.first_available_variant.id | json }},
+      firstVariantId: {{ product.selected_or_first_available_variant.id | json }},
       tilesPerBox: {{ product.metafields.custom.tiles_per_box | default: 1 | json }}
     };
   </script>
   {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}
+  <script>
+    console.log('📦 TOROS V2: asset script tag rendered');
+  </script>
 {% endif %}
