@@ -127,26 +127,19 @@
       <div class="block{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} rounded-[10px]{% endif %}">
         <div class="w-full h-full top-0 left-0 absolute duration-300 transition ease-out z-10">
           {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-          <img
-            srcset="{{ image | image_url: width: 225 }} 225w,
-            {{ image | image_url: width: 375 }} 375w,
-            {{ image | image_url: width: 450 }} 450w,
-            {{ image | image_url: width: 750 }} 750w,
-            {{ image | image_url: width: 900 }} 900w,
-            {{ image | image_url: width: 1100 }} 1100w,
-            {{ image | image_url: width: 1500 }} 1500w,
-            {{ image | image_url: width: 1780 }} 1780w"
-            src="{{ image | image_url: width: 1780 }}"
-            sizes="{{ sizes }}"
-            loading="{{ loading | default: 'lazy' }}"
-            alt="{{ image.alt | escape }}"
-            width="{{ image.width }}"
-            height="{{ image.width | divided_by: image.aspect_ratio }}"
-            style="object-position: {{ image.presentation.focal_point }};"
-            class="md:list-layout:hidden aspect-{{ image_ratio }} image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} rounded-[10px]{% endif %}"
-          >
-          {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
-          {% if list_layout %}
+          <picture>
+            <source
+              srcset="{{ image | image_url: width: 225, format: 'webp' }} 225w,
+              {{ image | image_url: width: 375, format: 'webp' }} 375w,
+              {{ image | image_url: width: 450, format: 'webp' }} 450w,
+              {{ image | image_url: width: 750, format: 'webp' }} 750w,
+              {{ image | image_url: width: 900, format: 'webp' }} 900w,
+              {{ image | image_url: width: 1100, format: 'webp' }} 1100w,
+              {{ image | image_url: width: 1500, format: 'webp' }} 1500w,
+              {{ image | image_url: width: 1780, format: 'webp' }} 1780w"
+              type="image/webp"
+              sizes="{{ sizes }}"
+            >
             <img
               srcset="{{ image | image_url: width: 225 }} 225w,
               {{ image | image_url: width: 375 }} 375w,
@@ -157,14 +150,49 @@
               {{ image | image_url: width: 1500 }} 1500w,
               {{ image | image_url: width: 1780 }} 1780w"
               src="{{ image | image_url: width: 1780 }}"
-              sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | plus: 100 }}px,100vw"
-              loading="lazy"
+              sizes="{{ sizes }}"
+              loading="{{ loading | default: 'lazy' }}"
               alt="{{ image.alt | escape }}"
               width="{{ image.width }}"
               height="{{ image.width | divided_by: image.aspect_ratio }}"
               style="object-position: {{ image.presentation.focal_point }};"
-              class="aspect-{{ image_ratio }} hidden md:list-layout:block image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
+              class="md:list-layout:hidden aspect-{{ image_ratio }} image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} rounded-[10px]{% endif %}"
             >
+          </picture>
+          {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+          {% if list_layout %}
+            <picture>
+              <source
+                srcset="{{ image | image_url: width: 225, format: 'webp' }} 225w,
+                {{ image | image_url: width: 375, format: 'webp' }} 375w,
+                {{ image | image_url: width: 450, format: 'webp' }} 450w,
+                {{ image | image_url: width: 750, format: 'webp' }} 750w,
+                {{ image | image_url: width: 900, format: 'webp' }} 900w,
+                {{ image | image_url: width: 1100, format: 'webp' }} 1100w,
+                {{ image | image_url: width: 1500, format: 'webp' }} 1500w,
+                {{ image | image_url: width: 1780, format: 'webp' }} 1780w"
+                type="image/webp"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | plus: 100 }}px,100vw"
+              >
+              <img
+                srcset="{{ image | image_url: width: 225 }} 225w,
+                {{ image | image_url: width: 375 }} 375w,
+                {{ image | image_url: width: 450 }} 450w,
+                {{ image | image_url: width: 750 }} 750w,
+                {{ image | image_url: width: 900 }} 900w,
+                {{ image | image_url: width: 1100 }} 1100w,
+                {{ image | image_url: width: 1500 }} 1500w,
+                {{ image | image_url: width: 1780 }} 1780w"
+                src="{{ image | image_url: width: 1780 }}"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | plus: 100 }}px,100vw"
+                loading="lazy"
+                alt="{{ image.alt | escape }}"
+                width="{{ image.width }}"
+                height="{{ image.width | divided_by: image.aspect_ratio }}"
+                style="object-position: {{ image.presentation.focal_point }};"
+                class="aspect-{{ image_ratio }} hidden md:list-layout:block image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
+              >
+            </picture>
           {% endif %}
         </div>
         <span class="absolute top-0 left-0 bottom-0 right-0 z-10 image-treatment-overlay opacity-{{ image_overlay_opacity }}"></span>
@@ -172,26 +200,42 @@
     </div>
   {% endif %}
 {% else %}
-    <img
-      srcset="{{ image | image_url: width: 225 }} 225w,
-      {{ image | image_url: width: 375 }} 375w,
-      {{ image | image_url: width: 450 }} 450w,
-      {{ image | image_url: width: 750 }} 750w,
-      {{ image | image_url: width: 900 }} 900w,
-      {{ image | image_url: width: 1100 }} 1100w,
-      {{ image | image_url: width: 1500 }} 1500w,
-      {{ image | image_url: width: 1780 }} 1780w"
-      src="{{ image | image_url: width: 1780 }}"
-      sizes="(min-width: {{ settings.page_width }}px) {% if enable_desktop_slider %}{{ settings.page_width | plus: 100 | divided_by: columns_desktop }}px{% else %}calc((100vw - 10rem) / {{ columns_desktop }}){% endif %}, 
-      (min-width: 768px) {% if columns_desktop > 1 %}calc((100vw - 5rem) / 2){% else %}calc(100vw - 5rem){% endif %}, 
-      calc((100vw) / {{ columns_mobile }})"
-      loading="lazy"
-      alt="{{ image.alt | escape }}"
-      width="{{ image.width }}"
-      height="{{ image.width | divided_by: image.aspect_ratio }}"
-      style="object-position: {{ image.presentation.focal_point }};"
-      class="aspect-{{ image_ratio }} image-hover w-full h-full object-cover z-10 duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
-    >
+    <picture>
+      <source
+        srcset="{{ image | image_url: width: 225, format: 'webp' }} 225w,
+        {{ image | image_url: width: 375, format: 'webp' }} 375w,
+        {{ image | image_url: width: 450, format: 'webp' }} 450w,
+        {{ image | image_url: width: 750, format: 'webp' }} 750w,
+        {{ image | image_url: width: 900, format: 'webp' }} 900w,
+        {{ image | image_url: width: 1100, format: 'webp' }} 1100w,
+        {{ image | image_url: width: 1500, format: 'webp' }} 1500w,
+        {{ image | image_url: width: 1780, format: 'webp' }} 1780w"
+        type="image/webp"
+        sizes="(min-width: {{ settings.page_width }}px) {% if enable_desktop_slider %}{{ settings.page_width | plus: 100 | divided_by: columns_desktop }}px{% else %}calc((100vw - 10rem) / {{ columns_desktop }}){% endif %}, 
+        (min-width: 768px) {% if columns_desktop > 1 %}calc((100vw - 5rem) / 2){% else %}calc(100vw - 5rem){% endif %}, 
+        calc((100vw) / {{ columns_mobile }})"
+      >
+      <img
+        srcset="{{ image | image_url: width: 225 }} 225w,
+        {{ image | image_url: width: 375 }} 375w,
+        {{ image | image_url: width: 450 }} 450w,
+        {{ image | image_url: width: 750 }} 750w,
+        {{ image | image_url: width: 900 }} 900w,
+        {{ image | image_url: width: 1100 }} 1100w,
+        {{ image | image_url: width: 1500 }} 1500w,
+        {{ image | image_url: width: 1780 }} 1780w"
+        src="{{ image | image_url: width: 1780 }}"
+        sizes="(min-width: {{ settings.page_width }}px) {% if enable_desktop_slider %}{{ settings.page_width | plus: 100 | divided_by: columns_desktop }}px{% else %}calc((100vw - 10rem) / {{ columns_desktop }}){% endif %}, 
+        (min-width: 768px) {% if columns_desktop > 1 %}calc((100vw - 5rem) / 2){% else %}calc(100vw - 5rem){% endif %}, 
+        calc((100vw) / {{ columns_mobile }})"
+        loading="lazy"
+        alt="{{ image.alt | escape }}"
+        width="{{ image.width }}"
+        height="{{ image.width | divided_by: image.aspect_ratio }}"
+        style="object-position: {{ image.presentation.focal_point }};"
+        class="aspect-{{ image_ratio }} image-hover w-full h-full object-cover z-10 duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
+      >
+    </picture>
 {% endunless %}
 
   <div class="w-full overflow-hidden pl-5 pr-5 md:pl-10 md:pr-10 z-10{% if image_ratio == "round" %}{% if image == blank %} flex relative pb-[100.0%] rounded-full items-center promotion-block-{{ block.id }} text-center{% else %} hidden{% endif %}{% else %}{% if image == blank %} relative{% else %} absolute{% endif %} top-0 right-0 bottom-0 left-0 {{ classLayout }} pt-6 pb-6 lg:pt-8 lg:pb-8 text-{{ alignment }}{% endif %}">

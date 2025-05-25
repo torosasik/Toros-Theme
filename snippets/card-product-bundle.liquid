@@ -174,6 +174,18 @@
                 <div class="w-full{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}{% if settings.product_image_type != "slide_img" or countMedia <= 1 or class_slide == 'recommendations'  %} top-0 left-0 absolute{% else %} overflow-hidden splide__slide x-splide-slide max-h-full{% endif %} duration-300 z-0 transition ease-out">
                   {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
                   <picture>
+                    <source
+                      srcset="
+                        {{ card_product.featured_media | image_url: width: 450, format: 'webp' }} 450w,
+                        {{ card_product.featured_media | image_url: width: 750, format: 'webp' }} 750w,
+                        {{ card_product.featured_media | image_url: width: 900, format: 'webp' }} 900w,
+                        {{ card_product.featured_media | image_url: width: 1100, format: 'webp' }} 1100w,
+                        {{ card_product.featured_media | image_url: width: 1500, format: 'webp' }} 1500w
+                        {% if card_product.featured_media.width %},{{ card_product.featured_media | image_url: format: 'webp' }} {{ card_product.featured_media.width }}w{% endif %}
+                      "
+                      type="image/webp"
+                      sizes="{{ sizes }}"
+                    >
                     <img
                       srcset="
                         {{ card_product.featured_media | image_url: width: 450 }} 450w,
@@ -198,6 +210,18 @@
                   {%- if settings.product_image_type == 'hover_to_reveal_second_image' -%}
                     <div class="w-full h-full top-0 left-0 absolute duration-300 z-0 transition ease-out">
                       <picture>
+                        <source
+                          srcset="
+                            {{ card_product.media[1] | image_url: width: 450, format: 'webp' }} 450w,
+                            {{ card_product.media[1] | image_url: width: 750, format: 'webp' }} 750w,
+                            {{ card_product.media[1] | image_url: width: 900, format: 'webp' }} 900w,
+                            {{ card_product.media[1] | image_url: width: 1100, format: 'webp' }} 1100w,
+                            {{ card_product.media[1] | image_url: width: 1500, format: 'webp' }} 1500w
+                            {% if card_product.media[1].width %},{{ card_product.media[1] | image_url: format: 'webp' }} {{ card_product.media[1].width }}w{% endif %}
+                          "
+                          type="image/webp"
+                          sizes="{{ sizes }}"
+                        >
                         <img
                           srcset="
                             {{ card_product.media[1] | image_url: width: 450 }} 450w,
@@ -225,6 +249,18 @@
                       {%- if forloop.index > 1 -%}
                         <div class="w-full splide__slide x-splide-slide duration-300 z-0 transition ease-out{% if media_aspect_ratio != "natural"  %} h-full min-h-full{% endif %}">
                           <picture>
+                            <source
+                              srcset="
+                                {{ media | image_url: width: 450, format: 'webp' }} 450w,
+                                {{ media | image_url: width: 750, format: 'webp' }} 750w,
+                                {{ media | image_url: width: 900, format: 'webp' }} 900w,
+                                {{ media | image_url: width: 1100, format: 'webp' }} 1100w,
+                                {{ media | image_url: width: 1500, format: 'webp' }} 1500w
+                                {% if media.width %},{{ media | image_url: format: 'webp' }} {{ media.width }}w{% endif %}
+                              "
+                              type="image/webp"
+                              sizes="{{ sizes }}"
+                            >
                             <img
                               srcset="
                                 {{ media | image_url: width: 450 }} 450w,
