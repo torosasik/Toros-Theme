@@ -388,6 +388,10 @@
       }
     </style>
     <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/mJcMHu3TQ8Y8YW6mVRrtdGwVa48lPPJTHuSztL5s" async></script>
+
+    {%- if settings.advanced_show_breadcrumbs -%}
+      {% render 'breadcrumbs' %}
+    {%- endif -%}
   </body>
 
 <!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->

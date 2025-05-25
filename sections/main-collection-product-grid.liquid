@@ -129,7 +129,7 @@
       endif
     -%}
     {%- if collection.products.size == 0 -%}
-      <div id="product-grid " class="hidden">
+      <div id="product-grid">
         {% if collection.filters != blank %}
           <p class="text-center">
             {{ 'sections.collection_template.empty' | t -}}
@@ -140,7 +140,7 @@
             }}
           </p>
         {%- else -%}
-          <p class="text-center">{{ 'sections.collection_template.no_product_collection' | t }}</p>
+          <p class="text-center h2 no-product-label">{{ 'sections.collection_template.no_product_collection' | t }}</p>
         {% endif %}
       </div>
     {% endif %}
