@@ -362,15 +362,48 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   let overageSetV2 = false;
-  const atcButtonSelector = '#x-atc-button-{{ section.id }}'; // Main Add to Cart button selector
+  // const atcButtonSelector = '#x-atc-button-{{ section.id }}'; // Main Add to Cart button selector
   const v2_product_price = {{ v2_product_price | divided_by: 100.00 }};
   const v2_box_dimensions = {{ v2_box_area_clean | default: 0 }};
   const v2_tiles_per_box = {{ v2_tiles_per_box | default: 1 }};
   const v2_max_allowed_qty = {{ v2_max_qty | default: 10000 }};
 
   // --- Start: Overage V2 Pop-up Trigger via Add to Cart Button ---
+  const atcButtonSelectorById = '#x-atc-button-{{ section.id }}';
+  let mainATCButton = document.querySelector(atcButtonSelectorById);
+  console.log('Toros V2: Attempting to find ATC button. Expected section.id: {{ section.id }}');
+  console.log('Toros V2: ATC button selector by ID:', atcButtonSelectorById);
+
+  if (mainATCButton) {
+    console.log('Toros V2: Found ATC button by ID:', mainATCButton);
+  } else {
+    console.log('Toros V2: ATC button NOT found by ID. Trying generic selectors...');
+    mainATCButton = document.querySelector('form[data-type="add-to-cart-form"] button[type="submit"][name="add"]');
+    if (mainATCButton) {
+      console.log('Toros V2: Found ATC button by generic form selector (form[data-type="add-to-cart-form"] button[type="submit"][name="add"]):', mainATCButton);
+    } else {
+      mainATCButton = document.querySelector('button.add_to_cart_button[name="add"]');
+      if (mainATCButton) {
+        console.log('Toros V2: Found ATC button by class selector (.add_to_cart_button[name="add"]):', mainATCButton);
+      } else {
+        mainATCButton = document.querySelector('#add'); // Fallback for very simple ID if name="add" is an ID
+        if (mainATCButton && mainATCButton.type === 'submit') {
+           console.log('Toros V2: Found ATC button by ID #add:', mainATCButton);
+        } else {
+           mainATCButton = document.querySelector('button[name="add"]'); // General name selector
+            if (mainATCButton) {
+                console.log('Toros V2: Found ATC button by name="add":', mainATCButton);
+            } else {
+                console.error('Toros V2: Main ATC button not found with any selector. Overage V2 pop-up will NOT trigger.');
+                return; // Exit if no button is found
+            }
+        }
+      }
+    }
+  }
+
   // This logic assumes the product has the 'overage-popup-v2' tag (checked by the outer Liquid if statement)
-  const mainATCButton = document.querySelector(atcButtonSelector);
+  // const mainATCButton = document.querySelector(atcButtonSelector); No longer needed here
   if (mainATCButton && mainATCButton.parentElement) {
     const overlayV2 = document.createElement('div');
     overlayV2.id = 'toros-v2-overage-submit';
@@ -557,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
       v2Popup.classList.remove('toros-v2-ovg-popup-open');
       document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
       
-      const finalAtcButton = document.querySelector(atcButtonSelector);
+      const finalAtcButton = document.querySelector(atcButtonSelectorById);
       if(finalAtcButton) {
           if(finalAtcButton.click) {
               finalAtcButton.click();
@@ -570,9 +603,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- End: V2 Add to Cart from Pop-up ---
 
   // Initialize manual input field visibility
+  const v2ManualInputContainer = document.getElementById('toros-v2-manual-ovg-input');
   document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
-    if (radio.checked && radio.value === 'manual') {
-      document.getElementById('toros-v2-manual-ovg-input').style.display = 'block';
+    if (radio.checked && radio.value === 'manual' && v2ManualInputContainer) {
+      v2ManualInputContainer.style.display = 'block';
     }
   });
 
