@@ -38,8 +38,11 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- unless settings.type_header_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
     {%- endunless -%}
 
     {%- comment -%}Auto-disabled. Yoast plugin is taking care of SEO output.{%- endcomment -%}
@@ -210,7 +213,7 @@
 
     <!-- Optimize CSS loading -->
     {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-    {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'custom.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
 
     <!-- Critical JavaScript -->

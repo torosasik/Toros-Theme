@@ -31,6 +31,8 @@
   else
     assign is_rtl = false
   endif
+  # For best performance, keep products_per_page at or below 16
+  assign products_per_page = 16
 -%}
 <div class="full-width subcollection--wrapper">
 {% if section.settings.collection_label != blank %}
@@ -102,7 +104,6 @@
     {% endif %}
   >
     {%- liquid
-      assign products_per_page = 20
       assign columns_desktop = section.settings.products_per_page | split: ';'
       assign number_products = blank
       assign param = blank
@@ -391,7 +392,7 @@
       "type": "text",
       "id": "products_per_page",
       "label": "t:sections.main-collection-product-grid.settings.products_per_page.label",
-      "info": "t:sections.main-collection-product-grid.settings.products_per_page.info"
+      "info": "t:sections.main-collection-product-grid.settings.products_per_page.info (Recommended: 16-20 for best performance)"
     },
     {
       "type": "paragraph",
