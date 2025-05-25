@@ -8,7 +8,8 @@
   ---------------------------------------------------------
 {% endcomment %}
 
-<link rel="stylesheet" href="{{ 'swiper-bundle.min.css' | asset_url }}">
+<link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'swiper-bundle.min.css' | asset_url }}"></noscript>
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 
 {%- liquid
@@ -527,12 +528,11 @@
               <div class="slider-image-{{ section.id }}">
                 {% if block.settings.image != blank %}
                   <img
-                    src="{{ block.settings.image | image_url }}"
+                    data-src="{{ block.settings.image | image_url }}"
                     alt="{{ block.settings.image.alt }}"
-                    {% if lazy %}
-                      loading="lazy"
-                    {% endif %}
+                    class="swiper-lazy"
                   >
+                  <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
                 {% else %}
                   {{ 'image' | placeholder_svg_tag }}
                 {% endif %}
@@ -597,6 +597,10 @@
       loopedSlides: 4,
       loop: true,
       slidesPerView: "auto",
+      preloadImages: false,
+      lazy: {
+        loadPrevNext: true
+      },
       coverflowEffect: {
         rotate: {{ slider_rotate }},
         stretch: 0,

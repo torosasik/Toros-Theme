@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"></noscript>
 
 {%- liquid
  assign padding_horizontal = section.settings.padding_horizontal
@@ -630,7 +631,7 @@
                  </div>
               {% elsif block.settings.image != blank %}
                 <div class="multicolumns-item-image-{{ section.id }}">
-                  <img src="{{ block.settings.image | image_url: width: 800 }}" alt="multicolumns-item-image-{{ forloop.index }}" {% if lazy %}lazy="loading"{% endif %}>
+                  <img src="{{ block.settings.image | image_url: width: 800 }}" alt="multicolumns-item-image-{{ forloop.index }}" {% if lazy %}loading="lazy"{% endif %}>
                 </div>
               {% endif %}
 
@@ -683,7 +684,8 @@
                      </div>
                   {% elsif block.settings.image != blank %}
                     <div class="multicolumns-item-image-{{ section.id }}">
-                      <img src="{{ block.settings.image | image_url: width: 800 }}" alt="multicolumns-item-image-{{ forloop.index }}" {% if lazy %}lazy="loading"{% endif %}>
+                      <img data-src="{{ block.settings.image | image_url: width: 800 }}" alt="multicolumns-item-image-{{ forloop.index }}" class="swiper-lazy">
+                      <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
                     </div>
                   {% endif %}
     
@@ -724,6 +726,10 @@
     new Swiper('.multicolumns-slider-{{ section.id }}', {
       speed: 300,
       watchOverflow: false,
+      preloadImages: false, // Added for Swiper lazy loading
+      lazy: { // Added for Swiper lazy loading
+        loadPrevNext: true
+      },
        {% if autoplay %}
        autoplay: {
          delay: {{ autoplay_speed | times: 1000 }},
