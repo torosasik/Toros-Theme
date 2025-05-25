@@ -4744,15 +4744,15 @@
 
 {% if product.tags contains 'overage-popup-v2' %}
   <script>
-    console.log('🔔 TOROS V2: inline popup script loaded');
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('x-atc-button-{{ section.id }}');
-      if (btn) {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-          alert('🛠 TOROS V2 test popup');
-        });
-      }
+    $(document).ready(function() {
+      // Remove any previous handler to avoid duplicates
+      $(document).off('click.torosV2');
+      // Use event delegation for dynamic content
+      $(document).on('click.torosV2', '#x-atc-button-{{ section.id }}', function(e) {
+        e.preventDefault();
+        alert('🛠 TOROS V2 test popup');
+      });
+      console.log('🔔 TOROS V2: jQuery delegated popup handler attached');
     });
   </script>
 {% endif %}
