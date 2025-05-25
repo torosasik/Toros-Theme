@@ -305,6 +305,7 @@
       class="content-for-layout focus-none outline-none theme-template-{{ template.name }} theme-template-suffix-{{ template.suffix | default: 'none' }} min-h-[60vh]"
       role="main"
       tabindex="-1"
+      style="contain: layout size;"
     >
       {{ content_for_layout }}
     </main>
@@ -392,6 +393,15 @@
     {%- if settings.advanced_show_breadcrumbs -%}
       {% render 'breadcrumbs' %}
     {%- endif -%}
+
+    <style>
+      .Online-Store-UI-BottomSheet-DraggableRegion__Content_2j6zb,
+      .Online-Store-UI-BottomSheet-DraggableRegion__Content--hasDraggableRegion_1j6zb {
+        min-height: 44px !important;
+        contain: layout size !important;
+        will-change: transform !important;
+      }
+    </style>
   </body>
 
 <!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->

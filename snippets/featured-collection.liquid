@@ -657,3 +657,25 @@
 </div>
 <script src="{{ 'preview-color-swatches.js' | asset_url }}" defer></script>
 <script src="{{ 'variant-select.js' | asset_url }}" defer></script>
+
+{%- style -%}
+  .featured-collection {
+    min-height: 300px;
+    contain: layout size;
+  }
+  .collection-title {
+    min-height: 44px;
+    contain: layout size;
+  }
+  .collection-image-container {
+    aspect-ratio: 1;
+    contain: layout size;
+  }
+  .collection-image {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .collection-image.loaded {
+    opacity: 1;
+  }
+{%- endstyle -%}
