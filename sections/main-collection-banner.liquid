@@ -16,6 +16,11 @@
   assign font_size_heading = section.settings.size_title | times: 0.01 | times: base_size_heading
   assign show_image_banner = false
 -%}
+{% if section.settings.show_collection_image and collection.image %}
+  <link rel="preload" as="image" href="{{ collection.image | image_url: width: 1500 }}"
+    imagesrcset="{{ collection.image | image_url: width: 750 }} 750w, {{ collection.image | image_url: width: 1500 }} 1500w, {{ collection.image | image_url: width: 3000 }} 3000w"
+    imagesizes="100vw">
+{% endif %}
 {%- style -%}
   .title--{{ section.id }} {
     font-size: {{ font_size_heading | times: 0.60 }}rem; 

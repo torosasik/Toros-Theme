@@ -9,14 +9,39 @@
       <a title="{{ title }}" class="cust-col-link" href="{{ collection_url }}">
         <div class="cust-collection-slider">
           <div class="slider-collec-image-wrap">
-            <img
-              width="{{ section.settings.image_size }}rem"
-              height="auto"
-              loading="lazy"
-              sizes="{{ section.settings.image_size }}px"
-              class="slider-collec-image"
-              src="{{ collection_image | image_url }}"
-            >
+            <picture>
+              <source
+                srcset="
+                  {{ collection_image | image_url: width: 225, format: 'webp' }} 225w,
+                  {{ collection_image | image_url: width: 375, format: 'webp' }} 375w,
+                  {{ collection_image | image_url: width: 450, format: 'webp' }} 450w,
+                  {{ collection_image | image_url: width: 750, format: 'webp' }} 750w,
+                  {{ collection_image | image_url: width: 900, format: 'webp' }} 900w,
+                  {{ collection_image | image_url: width: 1100, format: 'webp' }} 1100w,
+                  {{ collection_image | image_url: width: 1500, format: 'webp' }} 1500w
+                "
+                type="image/webp"
+                sizes="{{ section.settings.image_size }}px"
+              >
+              <img
+                srcset="
+                  {{ collection_image | image_url: width: 225 }} 225w,
+                  {{ collection_image | image_url: width: 375 }} 375w,
+                  {{ collection_image | image_url: width: 450 }} 450w,
+                  {{ collection_image | image_url: width: 750 }} 750w,
+                  {{ collection_image | image_url: width: 900 }} 900w,
+                  {{ collection_image | image_url: width: 1100 }} 1100w,
+                  {{ collection_image | image_url: width: 1500 }} 1500w
+                "
+                src="{{ collection_image | image_url: width: 1500 }}"
+                sizes="{{ section.settings.image_size }}px"
+                alt="{{ collection_image.alt | escape }}"
+                width="{{ section.settings.image_size }}"
+                height="auto"
+                loading="lazy"
+                class="slider-collec-image"
+              >
+            </picture>
           </div>
           <div class="slider-collec-name-wrap">
             <h2 class="slider-collec-name">{{ title }}</h2>

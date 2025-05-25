@@ -280,25 +280,46 @@
                           <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
                             <picture>
                               <source
-                                srcset="{{ imageUrlMobile | image_url: width: 375 }} 375w,
-                                  {{ imageUrlMobile | image_url: width: 450 }} 450w,
-                                  {{ imageUrlMobile | image_url: width: 750 }} 750w,
-                                  {{ imageUrlMobile | image_url: width: 900 }} 900w,
-                                  {{ imageUrlMobile | image_url: width: 1100 }} 1100w,
-                                  {{ imageUrlMobile | image_url: width: 1500 }} 1500w"
+                                srcset="
+                                  {{ imageUrlMobile | image_url: width: 375, format: 'webp' }} 375w,
+                                  {{ imageUrlMobile | image_url: width: 450, format: 'webp' }} 450w,
+                                  {{ imageUrlMobile | image_url: width: 750, format: 'webp' }} 750w,
+                                  {{ imageUrlMobile | image_url: width: 900, format: 'webp' }} 900w,
+                                  {{ imageUrlMobile | image_url: width: 1100, format: 'webp' }} 1100w,
+                                  {{ imageUrlMobile | image_url: width: 1500, format: 'webp' }} 1500w
+                                "
                                 media="(max-width: 767px)"
-                                width="{{ imageUrlMobile.width }}"
-                                height="{{ imageUrlMobile.height }}"
+                                type="image/webp"
+                                sizes="100vw"
+                              >
+                              <source
+                                srcset="
+                                  {{ imageDesktop | image_url: width: 750, format: 'webp' }} 750w,
+                                  {{ imageDesktop | image_url: width: 900, format: 'webp' }} 900w,
+                                  {{ imageDesktop | image_url: width: 1100, format: 'webp' }} 1100w,
+                                  {{ imageDesktop | image_url: width: 1500, format: 'webp' }} 1500w,
+                                  {{ imageDesktop | image_url: width: 1780, format: 'webp' }} 1780w,
+                                  {{ imageDesktop | image_url: width: 2000, format: 'webp' }} 2000w,
+                                  {{ imageDesktop | image_url: width: 3000, format: 'webp' }} 3000w,
+                                  {{ imageDesktop | image_url: width: 3840, format: 'webp' }} 3840w
+                                "
+                                type="image/webp"
+                                sizes="100vw"
                               >
                               <img
-                                srcset="{{ imageDesktop | image_url: width: 750 }} 750w,
+                                srcset="
+                                  {{ imageDesktop | image_url: width: 750 }} 750w,
                                   {{ imageDesktop | image_url: width: 900 }} 900w,
                                   {{ imageDesktop | image_url: width: 1100 }} 1100w,
                                   {{ imageDesktop | image_url: width: 1500 }} 1500w,
                                   {{ imageDesktop | image_url: width: 1780 }} 1780w,
                                   {{ imageDesktop | image_url: width: 2000 }} 2000w,
                                   {{ imageDesktop | image_url: width: 3000 }} 3000w,
-                                  {{ imageDesktop | image_url: width: 3840 }} 3840w"
+                                  {{ imageDesktop | image_url: width: 3840 }} 3840w
+                                "
+                                src="{{ imageDesktop | image_url: width: 3840 }}"
+                                sizes="100vw"
+                                alt="{{ imageDesktop.alt | escape }}"
                                 {% unless section.settings.show_hero and forloop.first %}
                                   loading="lazy"
                                 {% else %}
@@ -306,16 +327,9 @@
                                   fetchpriority="high"
                                   decoding="sync"
                                 {% endunless %}
-                                sizes="100vw"
-                                src="{{ imageDesktop | image_url: width: 3840 }}"
-                                {% if block.settings.image_mobile != blank %}
-                                  :alt="(screen.width < 768) ? '{{ block.settings.image_mobile.alt }}' : '{{ imageDesktop.alt }}'"
-                                {% else %}
-                                  alt="{{ imageDesktop.alt | escape }}"
-                                {% endif %}
-                                class="object-cover h-full w-full image-{{ block.id }}"
                                 width="{{ imageDesktop.width }}"
                                 height="{{ imageDesktop.height }}"
+                                class="object-cover h-full w-full image-{{ block.id }}"
                               >
                             </picture>
                           </parallax-movement>
