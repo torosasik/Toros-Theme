@@ -209,7 +209,7 @@
               class="pb-10 border-b border-solid grid grid-cols-{{ section.settings.products_per_row_on_mobile }} md:grid-cols-2 lg:grid-cols-{{ section.settings.products_per_row_on_desktop }} gap-{{ section.id }} md:list-layout:grid-cols-1"
             >
               
-              {%- for product in collection.products -%}{% comment %}EasylockdownFilterBegin{% endcomment %}{% capture easylockdownFilter %}{% render 'easylockdown_filter_collection' with product, easylockdownRender: true, easylockdownItemSelectorOff: easylockdownItemSelectorOff %}{% endcapture %}{% assign easylockdownFilter = easylockdownFilter | strip %}{% if easylockdownFilter == 'continue' %}{% continue %}{% else %}{{ easylockdownFilter }}{% endif %}{% comment %}EasylockdownFilterEnd{% endcomment %}
+              {%- for product in collection.products -%}
                 {% liquid
                   assign index = forloop.index
                   if forloop.index < 3
