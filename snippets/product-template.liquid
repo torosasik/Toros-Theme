@@ -1398,6 +1398,11 @@
 <script defer="defer">
   $(document).ready(function() {
     console.log("Document ready, calculator script loaded.");
+    
+    // EMERGENCY V2 DEBUG TEST - This should ALWAYS appear!
+    console.log('🚨🚨🚨 EMERGENCY V2 TEST: JavaScript execution reached this point!');
+    console.log('🚨🚨🚨 EMERGENCY V2 TEST: Product tags:', '{{ product.tags | join: ", " }}');
+    console.log('🚨🚨🚨 EMERGENCY V2 TEST: Has overage-popup-v2?', {{ product.tags contains "overage-popup-v2" | json }});
                         
     var output_boxes = 0;
     var overageSet = false;
@@ -1949,11 +1954,6 @@
     {% endif %}
 
     {% comment %} --- START: V2 Overage Calculator Implementation --- {% endcomment %}
-    console.log('🚨 TOROS V2 TEST: This line should ALWAYS execute!');
-    console.log('🚨 TOROS V2 TEST: Product tags are:', '{{ product.tags | join: ", " }}');
-    console.log('🚨 TOROS V2 TEST: Checking for overage-popup-v2 tag...');
-    console.log('🚨 TOROS V2 TEST: Tag check result:', {{ product.tags contains "overage-popup-v2" | json }});
-    
     {% if product.tags contains "overage-popup-v2" %}
       console.log('🎉 TOROS V2: Product has overage-popup-v2 tag, initializing...');
       
