@@ -2787,7 +2787,8 @@
     window.torosOverageV2 = {
       productTags: {{ product.tags | json }},
       firstVariantId: {{ product.first_available_variant.id | json }},
-      tilesPerBox: {{ product.metafields.custom.tiles_per_box | default: 1 | json }}
+      tilesPerBox: {{ product.metafields.my_fields.tiles_per_box | default: 1 | json }},
+      boxArea: {{ product.metafields.my_fields.box_area | remove: " sq. ft." | default: 0 | json }}
     };
   </script>
   {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}
@@ -4731,7 +4732,8 @@
     window.torosOverageV2 = {
       productTags: {{ product.tags | json }},
       firstVariantId: {{ product.selected_or_first_available_variant.id | json }},
-      tilesPerBox: {{ product.metafields.custom.tiles_per_box | default: 1 | json }}
+      tilesPerBox: {{ product.metafields.my_fields.tiles_per_box | default: 1 | json }},
+      boxArea: {{ product.metafields.my_fields.box_area | remove: " sq. ft." | default: 0 | json }}
     };
   </script>
   {{ 'toros-overage-calculator-v2.js' | asset_url | script_tag }}

@@ -48,7 +48,7 @@
         $('#v2-calc-result').text('Please enter valid numbers.');
         return;
       }
-      var boxes = Math.ceil(sqft / window.torosOverageV2.tilesPerBox * (1 + overage));
+      var boxes = Math.ceil(sqft / window.torosOverageV2.boxArea * (1 + overage));
       $('#v2-calc-result').text('You need ' + boxes + ' boxes');
       $('#v2-add-cart-btn').data('qty', boxes);
     });
