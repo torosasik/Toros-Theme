@@ -1949,6 +1949,11 @@
     {% endif %}
 
     {% comment %} --- START: V2 Overage Calculator Implementation --- {% endcomment %}
+    console.log('🚨 TOROS V2 TEST: This line should ALWAYS execute!');
+    console.log('🚨 TOROS V2 TEST: Product tags are:', '{{ product.tags | join: ", " }}');
+    console.log('🚨 TOROS V2 TEST: Checking for overage-popup-v2 tag...');
+    console.log('🚨 TOROS V2 TEST: Tag check result:', {{ product.tags contains "overage-popup-v2" | json }});
+    
     {% if product.tags contains "overage-popup-v2" %}
       console.log('🎉 TOROS V2: Product has overage-popup-v2 tag, initializing...');
       
