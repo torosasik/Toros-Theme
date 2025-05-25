@@ -2128,6 +2128,38 @@
   });
 </script>
 
+<!-- V2 Debug Script - Separate from main function -->
+<script defer="defer">
+  // This script will help us debug why V2 isn't working
+  console.log('💥 V2 DEBUG: Script tag executing');
+  console.log('💥 V2 DEBUG: Product tags:', '{{ product.tags | join: ", " }}');
+  console.log('💥 V2 DEBUG: Has overage-popup-v2?', {{ product.tags contains "overage-popup-v2" | json }});
+  
+  // Check if jQuery is available
+  if (typeof $ !== 'undefined') {
+    console.log('💥 V2 DEBUG: jQuery is available');
+    $(document).ready(function() {
+      console.log('💥 V2 DEBUG: This separate document.ready is working!');
+      
+      // Check if the main V1 function variables are available
+      if (typeof output_boxes !== 'undefined') {
+        console.log('💥 V2 DEBUG: V1 variables are available, output_boxes:', output_boxes);
+      } else {
+        console.log('💥 V2 DEBUG: V1 variables are NOT available');
+      }
+      
+      // Try to find elements from the main function
+      if ($('#boxes').length > 0) {
+        console.log('💥 V2 DEBUG: V1 elements found');
+      } else {
+        console.log('💥 V2 DEBUG: V1 elements NOT found');
+      }
+    });
+  } else {
+    console.log('💥 V2 DEBUG: jQuery is NOT available');
+  }
+</script>
+
                 
                 {%- when 'tabbed_information' -%}
                   <style>
