@@ -914,7 +914,7 @@
                           <span>Overage Calculator</span>
                         </div>
                         <div class="section-intro">
-                          <h4>Don’t forget to add the overage!</h4>
+                          <h4>Don't forget to add the overage!</h4>
                           <p>You will need for cuts, waste, breaks, and future repairs.</p>
                         </div>
                             <div class="flex-box">
@@ -4147,3 +4147,40 @@
     </script>
   {%- endif -%}
 {%- endif -%}
+
+          {% comment %}theme-check-disable liquidBlockShorthand,liquidStatement,liquidSingleLine,liquidIndentation,liquidNoSpaceAroundOperator {% endcomment %}
+          {% liquid
+            if product.metafields.custom.subtext != blank
+              echo "<div class='custom_subtext_wrapper'><p class='custom_subtext'>" | append: product.metafields.custom.subtext | append: "</p></div>"
+            endif
+          %}
+          {% comment %}theme-check-enable liquidBlockShorthand,liquidStatement,liquidSingleLine,liquidIndentation,liquidNoSpaceAroundOperator {% endcomment %}
+
+          {% comment %} --- START: Rendering Toros Overage Calculator V2 --- {% endcomment %}
+          {%- liquid
+            assign toros_v2_box_area_clean = product.metafields.my_fields.box_area | remove: " sq. ft." | default: "0"
+            assign toros_v2_tiles_per_box = product.metafields.my_fields.tiles_per_box | default: 1
+            if toros_v2_tiles_per_box == 0 or toros_v2_tiles_per_box == blank
+              assign toros_v2_tiles_per_box = 1
+            endif
+            
+            assign toros_v2_current_variant = product.selected_or_first_available_variant
+            if toros_v2_box_area_clean == "0" or toros_v2_box_area_clean == blank or toros_v2_tiles_per_box == 0
+              assign toros_v2_tile_size = 0
+            else
+              assign toros_v2_tile_size = toros_v2_box_area_clean | times: 1.0 | divided_by: toros_v2_tiles_per_box | round: 4
+            endif
+
+            assign toros_v2_max_qty = 10000
+            if toros_v2_current_variant.inventory_management == 'shopify' and toros_v2_current_variant.inventory_quantity > 0
+              assign toros_v2_max_qty = toros_v2_current_variant.inventory_quantity
+            else
+              assign toros_v2_max_qty = 10000  # Default if not managed or no quantity
+            endif
+          -%}
+          {% render 'toros-overage-calculator-v2', product: product, section: section, cart: cart, current_variant: toros_v2_current_variant, v2_box_area_clean: toros_v2_box_area_clean, v2_tile_size: toros_v2_tile_size, v2_tiles_per_box: toros_v2_tiles_per_box, v2_max_qty: toros_v2_max_qty %}
+          {% comment %} --- END: Rendering Toros Overage Calculator V2 --- {% endcomment %}
+
+        </div>
+      </div>
+    {%- else -%}

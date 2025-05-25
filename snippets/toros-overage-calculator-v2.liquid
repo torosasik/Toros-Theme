@@ -1,0 +1,580 @@
+{% comment %}
+  Toros Overage Calculator V2
+  Triggered by product tag: 'overage-popup-v2'
+{% endcomment %}
+
+{%- liquid
+  assign v2_product_price = current_variant.price | default: product.price
+-%}
+
+{% if product.tags contains 'overage-popup-v2' %}
+<style>
+  #toros-v2-ovg-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Softer overlay */
+    height: 100%;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    backdrop-filter: blur(8px); /* Adjusted blur */
+    justify-content: center;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1000; /* Ensure it's above other elements */
+    opacity: 0;
+    visibility: hidden;
+  }
+  #toros-v2-ovg-popup.toros-v2-ovg-popup-open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+  }
+  #toros-v2-ovg-popup-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15); /* Softer shadow */
+    position: relative;
+    overflow-y: auto;
+    max-height: 90%;
+    margin: 20px;
+    width:100%;
+    max-width:550px; /* Slightly adjusted width */
+    border: 1px solid #e0e0e0; /* Lighter border */
+  }
+  #toros-v2-ovg-popup-close {
+      max-width: 36px; /* Slightly smaller */
+      background-color: #143055; /* Main blue */
+      height: 36px;
+      border-radius: 50%;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: absolute;
+      right: 15px; /* Adjusted position */
+      top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center icon */
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+  }
+  #toros-v2-ovg-popup-close:hover {
+    background-color: #0263ac; /* Brighter blue on hover */
+  }
+  #toros-v2-ovg-popup-close svg {
+      width: 20px; /* Adjusted icon size */
+      height: 20px;
+      stroke-width: 3px; /* Thinner stroke for a lighter feel */
+      stroke: #fff !important;
+  }
+  #toros-v2-ovg-popup .heading {
+    color: #143055;
+    font-size: 22px; /* Slightly smaller heading */
+    font-weight: 600; /* Semibold */
+    margin-bottom: 10px;
+    text-align: center;
+  }
+   #toros-v2-ovg-popup .section-intro h4 {
+    color: #143055;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+   }
+  #toros-v2-ovg-popup .section-intro p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #toros-v2-ovg-popup .flex-box {
+    display: flex;
+    justify-content: space-between; /* For outcome section */
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  #toros-v2-ovg-popup .flex-box .input-box { /* For single input like Sq.Ft. */
+    width: 100%;
+    text-align: center; /* Center the sq ft input area */
+  }
+  #toros-v2-ovg-popup .input-box input[type='text'],
+  #toros-v2-ovg-popup .input-box input[type='number'] {
+    text-align: center;
+    border: 1px solid #ccc; /* Standard border */
+    border-radius: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 10px 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+   #toros-v2-ovg-popup .input-box input:focus {
+    border-color: #0263ac; /* Highlight focus */
+    box-shadow: 0 0 0 2px rgba(2, 99, 172, 0.2);
+    outline: none;
+   }
+  #toros-v2-ovg-popup span.input-label {
+    font-size: 13px;
+    color: #333;
+    display: block;
+  }
+  #toros-v2-ovg-popup h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #143055;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  #toros-v2-ovg-overage-selectors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Center radio buttons */
+      column-gap: 1rem;
+      row-gap: .5rem;
+      margin: .5rem 0 1rem 0;
+  }
+  #toros-v2-ovg-overage-selectors label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  #toros-v2-ovg-overage-selectors input[type='radio'] {
+    margin-right: 8px;
+  }
+  #toros-v2-ovg-overage-selectors label:hover {
+    border-color: #0263ac;
+  }
+  #toros-v2-ovg-overage-selectors input[type='radio']:checked + label {
+     background-color: #e7f0f7; /* Light blue for selected */
+     border-color: #0263ac;
+  }
+  #toros-v2-manualInputFieldOVG {
+      border: 1px solid #ccc;
+      padding: 8px;
+      width: 100px;
+      margin: 0 auto .5rem auto;
+      border-radius: 5px;
+      display: block; /* Center manual input */
+  }
+  #toros-v2-ovg-popup a.calculate_btn,
+  #toros-v2-ovg-popup button.btn-calculator {
+    width: 100%;
+    background: #143055; /* Main blue */
+    border: none;
+    padding: 12px;
+    margin: 20px 0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s ease;
+  }
+  #toros-v2-ovg-popup a.calculate_btn:hover,
+  #toros-v2-ovg-popup button.btn-calculator:hover {
+    background: #0263ac; /* Brighter blue on hover */
+  }
+  #toros-v2-ovg-popup .footer_outcome {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+  }
+  #toros-v2-ovg-popup .footer_outcome .line-separator {
+    text-align: center;
+    margin: 0px 0 20px;
+    border-bottom: 1px solid #eee;
+  }
+  #toros-v2-ovg-popup .footer_outcome span.separator {
+    background: #fff;
+    padding: 0 10px;
+    position: relative;
+    top: 11px;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: #555;
+    font-weight: 600;
+  }
+  #toros-v2-ovg-popup .footer_outcome .input-box {
+    width: 48%; /* For side-by-side outcome boxes */
+  }
+  #toros-v2-ovg-popup .footer_outcome .input-box input {
+    background-color: #f9f9f9; /* Light background for disabled inputs */
+    color: #333;
+    font-weight: bold;
+  }
+  #toros-v2-ovg-popup .actions {
+    margin-top: 10px;
+  }
+
+  /* Styles for the Add to Cart overlay - V2 specific */
+  #toros-v2-overage-submit {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 11; /* Needs to be above the actual button */
+      cursor: pointer; /* Indicate it's clickable */
+      /* background: rgba(0,0,0,0.01); Optional: for debugging visibility */
+  }
+
+  /* General utility for hiding parent scroll when popup is open */
+  .toros-v2-overflow-pop-hidden {
+    overflow: hidden;
+  }
+
+</style>
+
+<div id="toros-v2-ovg-popup">
+  <div id="toros-v2-ovg-popup-content">
+    <div id="toros-v2-ovg-popup-close">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#FFFFFF">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><line x1="16" y1="16" x2="48" y2="48"></line><line x1="48" y1="16" x2="16" y2="48"></line></g>
+      </svg>
+    </div>
+    <div class="heading">
+      <span>Toros Overage Calculator V2</span>
+    </div>
+    <div class="section-intro">
+      <h4>Don't forget to add the overage!</h4>
+      <p>You will need for cuts, waste, breaks, and future repairs.</p>
+    </div>
+    <div class="flex-box">
+      <div class="input-box">
+        <input
+          type="text"
+          name="toros-v2-ovg-calculator-footage"
+          id="toros-v2-ovg-calculator-footage"
+          class="required-entry validate-digits"
+          placeholder="0"
+        >
+        <span class="input-label">Sq. Ft.</span>
+      </div>
+    </div>
+    <h4>Overage Amount</h4>
+    <div id="toros-v2-ovg-overage">
+      <div id="toros-v2-ovg-overage-selectors">
+      <label for="toros-v2-overage-10">
+        <input type="radio" name="properties[TOROS_V2_OVERAGE]" value="0.10" checked id="toros-v2-overage-10"> 10%
+      </label>
+      <label for="toros-v2-overage-15">
+        <input type="radio" name="properties[TOROS_V2_OVERAGE]" value="0.15" id="toros-v2-overage-15"> 15%
+      </label>
+      <label for="toros-v2-ovg-manualInputRadio">
+        <input type="radio" name="properties[TOROS_V2_OVERAGE]" value="manual" id="toros-v2-ovg-manualInputRadio"> Manual Input
+      </label>
+      <label for="toros-v2-overage-none">
+        <input type="radio" name="properties[TOROS_V2_OVERAGE]" value="no_overage" id="toros-v2-overage-none"> No Overage
+      </label>
+      </div>
+      <div id="toros-v2-manual-ovg-input" style="display: none;">
+      <input type="number" id="toros-v2-manualInputFieldOVG" name="properties[TOROS_V2_OVERAGE_MANUAL]" placeholder="Enter %" step="1" min="0"> %
+      </div>
+    </div>
+    
+    <a href="#" class="calculate_btn" id="toros-v2-ovg-calculate">Calculate</a>
+
+   <div class="footer_outcome">
+        <div class="calculator-section line-separator">
+          <span class="separator">Outcome</span>
+        </div>
+        <div class="flex-box">
+          <div class="input-box box-half" novalidate="novalidate">
+            <input
+              type="text"
+              class="solution_input form-control"
+              disabled="disabled"
+              id="toros-v2-ovg-solution"
+              placeholder="0"
+            >
+            <span class="input-label">Sq. Ft.</span>
+          </div>
+          <div class="input-box box-half" novalidate="novalidate">
+            <input
+              type="text"
+              class="solution_input form-control"
+              disabled="disabled"
+              id="toros-v2-ovg-total_coverage"
+              placeholder="0"
+            >
+            <span class="input-label">Total Coverage Sq. Ft.</span>
+          </div>
+        </div>
+        <div class="flex-box">
+          <div class="input-box box-half" novalidate="novalidate">
+            <input
+              type="text"
+              class="solution_input form-control"
+              disabled="disabled"
+              id="toros-v2-ovg-boxes"
+              placeholder="0"
+            >
+            <span class="input-label">
+              {% if product.metafields.measuringunitsatd.measuring_units_atd == "Box" %}
+                {{ product.metafields.measuringunitsatd.measuring_units_atd }}es
+              {% elsif product.metafields.measuringunitsatd.measuring_units_atd == "Sheet" %}
+                {{ product.metafields.measuringunitsatd.measuring_units_atd }}s
+              {% elsif product.metafields.measuringunitsatd.measuring_units_atd == "Piece" %}
+                {{ product.metafields.measuringunitsatd.measuring_units_atd }}s
+              {% else %}
+                Boxes
+              {% endif %}
+            </span>
+          </div>
+          <div class="input-box box-half" novalidate="novalidate">
+            <input
+              type="text"
+              class="solution_input form-control"
+              disabled="disabled"
+              id="toros-v2-ovg-total_cost"
+              placeholder="0"
+            >
+            <span class="input-label">Total Price</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calculator-section actions">
+        <button id="toros-v2-ovg-addToquanitity" class="btn-calculator">
+          <span id="toros-v2-ovg-addToCartquanitity">Add To Cart</span>
+        </button>
+      </div>
+    
+  </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Ensure this script only runs if the V2 popup HTML is actually on the page
+  const v2Popup = document.getElementById('toros-v2-ovg-popup');
+  if (!v2Popup) {
+    return; // V2 popup not present, do nothing
+  }
+
+  let overageSetV2 = false;
+  const atcButtonSelector = '#x-atc-button-{{ section.id }}'; // Main Add to Cart button selector
+  const v2_product_price = {{ v2_product_price | divided_by: 100.00 }};
+  const v2_box_dimensions = {{ v2_box_area_clean | default: 0 }};
+  const v2_tiles_per_box = {{ v2_tiles_per_box | default: 1 }};
+  const v2_max_allowed_qty = {{ v2_max_qty | default: 10000 }};
+
+  // --- Start: Overage V2 Pop-up Trigger via Add to Cart Button ---
+  // This logic assumes the product has the 'overage-popup-v2' tag (checked by the outer Liquid if statement)
+  const mainATCButton = document.querySelector(atcButtonSelector);
+  if (mainATCButton && mainATCButton.parentElement) {
+    const overlayV2 = document.createElement('div');
+    overlayV2.id = 'toros-v2-overage-submit';
+    mainATCButton.parentElement.style.position = 'relative'; // Ensure parent can host absolute overlay
+    mainATCButton.parentElement.appendChild(overlayV2);
+
+    overlayV2.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent any default action
+      e.stopPropagation(); // Stop event from bubbling to the actual ATC button immediately
+      
+      const currentSqFtInput = document.getElementById('squared_size');
+      const v2CalculatorFootageInput = document.getElementById('toros-v2-ovg-calculator-footage');
+      if (currentSqFtInput && v2CalculatorFootageInput) {
+          v2CalculatorFootageInput.value = currentSqFtInput.value;
+      }
+
+      if (!overageSetV2) {
+        document.documentElement.classList.add('toros-v2-overflow-pop-hidden');
+        v2Popup.classList.add('toros-v2-ovg-popup-open');
+      } else {
+        // Overage V2 already set, proceed to click the real ATC button
+        if(mainATCButton.click) {
+            mainATCButton.click();
+        } else { // Fallback for some environments or button types
+            mainATCButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+      }
+    });
+  }
+  // --- End: Overage V2 Pop-up Trigger ---
+
+  // --- Start: V2 Pop-up Event Listeners (Close, Manual Input Radio) ---
+  const v2PopupContent = document.getElementById('toros-v2-ovg-popup-content');
+  const v2CloseButton = document.getElementById('toros-v2-ovg-popup-close');
+
+  if (v2CloseButton) {
+    v2CloseButton.addEventListener('click', function() {
+      v2Popup.classList.remove('toros-v2-ovg-popup-open');
+      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+    });
+  }
+
+  // Close popup if clicked outside content area
+  v2Popup.addEventListener('click', function(event) {
+    if (v2PopupContent && !v2PopupContent.contains(event.target)) {
+      v2Popup.classList.remove('toros-v2-ovg-popup-open');
+      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+    }
+  });
+
+  document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      const manualInputFieldV2 = document.getElementById('toros-v2-manual-ovg-input');
+      if (this.value === 'manual') {
+        manualInputFieldV2.style.display = 'block'; // Use block for centering
+        document.getElementById('toros-v2-manualInputFieldOVG').focus();
+      } else {
+        manualInputFieldV2.style.display = 'none';
+      }
+    });
+  });
+  // --- End: V2 Pop-up Event Listeners ---
+
+  // --- Start: V2 Calculation Logic ---
+  function roundUpV2(num, decimalPlaces) {
+    const factor = Math.pow(10, decimalPlaces);
+    return Math.ceil(num * factor) / factor;
+  }
+
+  function updatePropertyFieldsV2(quantity, sqft, pieces) {
+    const propertyQtyEl = document.querySelector('input[name="properties[QTY_V2]"]');
+    const propertySqftEl = document.querySelector('input[name="properties[SQFT_V2]"]');
+    const propertyPiecesEl = document.querySelector('input[name="properties[PIECES_V2]"]');
+    // It's better to create these hidden fields if they don't exist yet.
+    // For now, assuming they might be added elsewhere or this is just for data prep.
+  }
+  
+  function updateV2CalculatorOutputs(boxes, footageWithOverage, totalCost) {
+      document.getElementById('toros-v2-ovg-boxes').value = boxes;
+      document.getElementById('toros-v2-ovg-solution').value = footageWithOverage.toFixed(2);
+      document.getElementById('toros-v2-ovg-total_coverage').value = (boxes * v2_box_dimensions).toFixed(2);
+      document.getElementById('toros-v2-ovg-total_cost').value = '$ ' + totalCost.toFixed(2);
+  }
+
+  function calculateOverageV2() {
+    if (v2_box_dimensions <= 0) {
+        alert('Product box dimensions are not configured correctly.');
+        return;
+    }
+    let calculator_footage = parseFloat(document.getElementById('toros-v2-ovg-calculator-footage').value) || 0;
+    if (calculator_footage <= 0) {
+        alert('Please enter the square footage you want to cover.');
+        document.getElementById('toros-v2-ovg-calculator-footage').focus();
+        return;
+    }
+
+    let selectedOverageRadio = document.querySelector('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]:checked');
+    let overagePercent = 0;
+
+    if (selectedOverageRadio) {
+        if (selectedOverageRadio.value === 'manual') {
+            overagePercent = parseFloat(document.getElementById('toros-v2-manualInputFieldOVG').value) / 100 || 0;
+        } else if (selectedOverageRadio.value !== 'no_overage') {
+            overagePercent = parseFloat(selectedOverageRadio.value) || 0;
+        }
+    }
+    if (overagePercent < 0) overagePercent = 0; // Ensure non-negative overage
+
+    let footageIncludingOverage = calculator_footage * (1 + overagePercent);
+    let boxes_needed = Math.ceil(footageIncludingOverage / v2_box_dimensions);
+    
+    if (v2_tiles_per_box <= 0) v2_tiles_per_box = 1; // Avoid division by zero for pieces
+
+    if (boxes_needed > v2_max_allowed_qty) {
+        alert("Only " + v2_max_allowed_qty + " available. Adjusting quantity.");
+        boxes_needed = v2_max_allowed_qty;
+        footageIncludingOverage = boxes_needed * v2_box_dimensions / (1 + overagePercent); // Recalculate approx. base footage
+    }
+    
+    let total_cost = v2_product_price * boxes_needed;
+    let actual_total_coverage = boxes_needed * v2_box_dimensions;
+
+    updateV2CalculatorOutputs(boxes_needed, footageIncludingOverage, total_cost);
+
+    // Update main page quantity input (assuming ID 'quantity_look_alike' and 'squared_size' from V1 context)
+    const quantityLookAlikeEl = document.getElementById('quantity_look_alike');
+    const squaredSizeEl = document.getElementById('squared_size');
+    const mainQuantityEl = document.querySelector('input[name="quantity"]');
+
+    if (quantityLookAlikeEl) quantityLookAlikeEl.value = boxes_needed;
+    if (squaredSizeEl) squaredSizeEl.value = actual_total_coverage.toFixed(2);
+    if (mainQuantityEl) mainQuantityEl.value = boxes_needed;
+    
+    // Update hidden property for overage percentage if it exists for form submission
+    const propertyOverageV2 = document.querySelector('input[name="properties[OVERAGE_PERCENT_V2]"]');
+    if (propertyOverageV2) {
+        propertyOverageV2.value = (overagePercent * 100).toFixed(0) + '%';
+    }
+
+    // Also create/update TOROS_V2_OVERAGE and TOROS_V2_OVERAGE_MANUAL based on selection
+    // This ensures the selected radio/manual input value is part of the form properties
+    // (Handled by the radio button names `properties[...]` themselves)
+
+    overageSetV2 = true;
+    const overlayV2 = document.getElementById('toros-v2-overage-submit');
+    // No need to remove the overlay, its click logic now handles the overageSetV2 flag
+  }
+
+  const calculateBtnV2 = document.getElementById('toros-v2-ovg-calculate');
+  if (calculateBtnV2) {
+    calculateBtnV2.addEventListener('click', function(e){
+      e.preventDefault();
+      calculateOverageV2();
+    });
+  }
+  // --- End: V2 Calculation Logic ---
+
+  // --- Start: V2 Add to Cart from Pop-up ---
+  const addToCartBtnV2 = document.getElementById('toros-v2-ovg-addToquanitity');
+  if (addToCartBtnV2) {
+    addToCartBtnV2.addEventListener('click', function(e){
+      e.preventDefault();
+      let calculated_boxes = parseFloat(document.getElementById('toros-v2-ovg-boxes').value) || 0;
+
+      if (calculated_boxes <= 0) {
+        alert("Please calculate the required quantity first.");
+        return;
+      }
+      if (calculated_boxes > v2_max_allowed_qty) {
+         alert("Only " + v2_max_allowed_qty + " available. Please adjust.");
+         return;
+      }
+      
+      // Ensure overage has been considered and values are set
+      if (!overageSetV2) {
+        calculateOverageV2(); // Recalculate to be sure, or prompt user
+        if (!overageSetV2) { // If still not set (e.g. validation failed in calc)
+            alert("Please complete the overage calculation.");
+            return;
+        }
+      }
+      
+      // Values are set by calculateOverageV2 into main page inputs, close popup and click main ATC
+      v2Popup.classList.remove('toros-v2-ovg-popup-open');
+      document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
+      
+      const finalAtcButton = document.querySelector(atcButtonSelector);
+      if(finalAtcButton) {
+          if(finalAtcButton.click) {
+              finalAtcButton.click();
+          } else {
+              finalAtcButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          }
+      }
+    });
+  }
+  // --- End: V2 Add to Cart from Pop-up ---
+
+  // Initialize manual input field visibility
+  document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
+    if (radio.checked && radio.value === 'manual') {
+      document.getElementById('toros-v2-manual-ovg-input').style.display = 'block';
+    }
+  });
+
+});
+</script> 

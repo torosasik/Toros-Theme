@@ -1,5 +1,5 @@
 {% comment %}
-    Renders a collection card with optimized image loading
+    Renders a collection card
 
     Accepts:
     - card_collection: {Object} Collection Liquid object
@@ -86,23 +86,49 @@
         {% endcapture %}
         {%- if image != blank -%}
           <div class="w-full h-full top-0 left-0 absolute overflow-hidden duration-300 transition ease-out">
-            {% render 'optimized-image',
-              image: image,
-              width: 3840,
-              height: 3840,
-              loading: 'lazy',
-              class: 'aspect-' | append: image_ratio | append: ' w-full h-full object-cover z-10 object-center image-hover' | append: ' ' | append: image_ratio == "round" ? 'rounded-full' : '' | append: ' ' | append: corner_image and image_ratio != "round" ? 'md:rounded-[10px]' : '' | append: ' ' | append: card_full_width ? '' : 'rounded-[10px]'
-            %}
+            <img
+              srcset="{{ image | image_url: width: 225 }} 225w,
+              {{ image | image_url: width: 375 }} 375w,
+              {{ image | image_url: width: 450 }} 450w,
+              {{ image | image_url: width: 750 }} 750w,
+              {{ image | image_url: width: 900 }} 900w,
+              {{ image | image_url: width: 1100 }} 1100w,
+              {{ image | image_url: width: 1500 }} 1500w,
+              {{ image | image_url: width: 1780 }} 1780w,
+              {{ image | image_url: width: 2000 }} 2000w,
+              {{ image | image_url: width: 3000 }} 3000w,
+              {{ image | image_url: width: 3840 }} 3840w"
+              src="{{ image | image_url: width: 3840 }}"
+              sizes="{{ sizes }}"
+              alt="{{ image.alt | escape }}"
+              height="{{ image.height }}"
+              width="{{ image.width }}"
+              loading="lazy"
+              class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
+            >
           </div>
         {%- elsif card_collection.featured_image -%}
           <div class="w-full h-full top-0 left-0 absolute overflow-hidden duration-300 transition ease-out">
-            {% render 'optimized-image',
-              image: card_collection.featured_image,
-              width: 3840,
-              height: 3840,
-              loading: 'lazy',
-              class: 'aspect-' | append: image_ratio | append: ' w-full h-full object-cover z-10 object-center image-hover' | append: ' ' | append: image_ratio == "round" ? 'rounded-full' : '' | append: ' ' | append: corner_image and image_ratio != "round" ? 'md:rounded-[10px]' : '' | append: ' ' | append: card_full_width ? '' : 'rounded-[10px]'
-            %}
+            <img
+              srcset="{{ card_collection.featured_image | image_url: width: 225 }} 225w,
+              {{ card_collection.featured_image | image_url: width: 375 }} 375w,
+              {{ card_collection.featured_image | image_url: width: 450 }} 450w,
+              {{ card_collection.featured_image | image_url: width: 750 }} 750w,
+              {{ card_collection.featured_image | image_url: width: 900 }} 900w,
+              {{ card_collection.featured_image | image_url: width: 1100 }} 1100w,
+              {{ card_collection.featured_image | image_url: width: 1500 }} 1500w,
+              {{ card_collection.featured_image | image_url: width: 1780 }} 1780w,
+              {{ card_collection.featured_image | image_url: width: 2000 }} 2000w,
+              {{ card_collection.featured_image | image_url: width: 3000 }} 3000w,
+              {{ card_collection.featured_image | image_url: width: 3840 }} 3840w"
+              src="{{ card_collection.featured_image | image_url: width: 3840 }}"
+              sizes="{{ sizes }}"
+              alt="{{ card_collection.featured_image.alt | escape }}"
+              height="{{ card_collection.featured_image.height }}"
+              width="{{ card_collection.featured_image.width }}"
+              loading="lazy"
+              class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
+            >
           </div>
         {%- else -%}
           <div class="flex{% unless image_ratio == "auto" %} absolute{% endunless %} top-0 left-0 w-full h-full items-center bg-[#c9c9c9]">

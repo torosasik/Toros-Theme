@@ -55,10 +55,10 @@
       {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
     {%- endif -%}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     {% if template contains "product" %}
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" media="print" onload="this.media='all'">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" defer></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
     {% endif %}
 
     {% if page_description %}
@@ -88,7 +88,7 @@
     {{ content_for_header }}
     {{ settings.additional_head }}
 
-    <script type="text/javascript" defer>
+    <script type="text/javascript">
       window.ProductSample = window.ProductSample || {};
       if (typeof ProductSample === 'undefined') {
         var ProductSample = {};
@@ -117,10 +117,10 @@
         });
       });
     </script>
-  <script data-custom-wpsob="1" defer>function a(e){const t=e.getBoundingClientRect();return t.top>=0&&t.left>=0&&t.bottom<=(window.innerHeight||document.documentElement.clientHeight)&&t.right<=(window.innerWidth||document.documentElement.clientWidth)}function b(e){e.hasAttribute("data-wpsob-width")&&e.removeAttribute("width"),e.hasAttribute("data-wpsob-height")&&e.removeAttribute("height")}function c(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)a(e[t])&&b(e[t])}function d(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)b(e[t])}window.onload=c,window.addEventListener("scroll",d);</script>  <!--CPC-->
+  <script data-custom-wpsob="1">function a(e){const t=e.getBoundingClientRect();return t.top>=0&&t.left>=0&&t.bottom<=(window.innerHeight||document.documentElement.clientHeight)&&t.right<=(window.innerWidth||document.documentElement.clientWidth)}function b(e){e.hasAttribute("data-wpsob-width")&&e.removeAttribute("width"),e.hasAttribute("data-wpsob-height")&&e.removeAttribute("height")}function c(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)a(e[t])&&b(e[t])}function d(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)b(e[t])}window.onload=c,window.addEventListener("scroll",d);</script>  <!--CPC-->
   
   {% if template contains 'product' and customer == nil %}
-  <script defer>
+  <script>
     // Early script to ensure Better Price is hidden for guests on Elysium products
     window.addEventListener('DOMContentLoaded', function() {
       var isElysiumProduct = false;
@@ -206,61 +206,6 @@
     });
   </script>
   {% endif %}
-
-  <!-- Preload critical resources -->
-  <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
-  <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
-  <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
-  <link rel="preload" href="{{ 'jquery.min.js' | asset_url }}" as="script">
-
-  <!-- Meta description -->
-  <meta name="description" content="{{ page_description | default: shop.description | escape }}">
-
-  <!-- Optimize CSS loading -->
-  {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-
-  <!-- Critical JavaScript -->
-  <script src="{{ 'jquery.min.js' | asset_url }}" defer></script>
-  <script src="{{ 'theme.js' | asset_url }}" defer></script>
-
-  <!-- Non-critical JavaScript -->
-  <script src="{{ 'fancybox.umd.js' | asset_url }}" defer></script>
-  <script src="{{ 'fancybox.css' | asset_url }}" defer></script>
-  <script src="{{ 'custom.js' | asset_url }}" defer></script>
-  <script src="{{ 'vendors.js' | asset_url }}" defer></script>
-
-  <!-- Image loading optimization -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Lazy load images
-      const images = document.querySelectorAll('img[loading="lazy"]');
-      const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.remove('lazy');
-            observer.unobserve(img);
-          }
-        });
-      });
-
-      images.forEach(img => {
-        if (img.dataset.src) {
-          imageObserver.observe(img);
-        }
-      });
-
-      // Preload critical images
-      const criticalImages = document.querySelectorAll('img[loading="eager"]');
-      criticalImages.forEach(img => {
-        if (img.dataset.src) {
-          img.src = img.dataset.src;
-        }
-      });
-    });
-  </script>
 </head>
   <body
     class="gradient  overflow-x-hidden text-[{{ settings.text_base_size | times: 0.007875 }}rem] md:text-[{{ settings.text_base_size | times: 0.00875 }}rem]{% if settings.lang_direction contains request.locale.iso_code %} rtl{% endif %}"
@@ -354,10 +299,8 @@
       <script src="{{ 'theme-editor-alpine-custom.js' | asset_url }}" defer></script>
       <script src="{{ 'theme-editor.js' | asset_url }}" defer></script>
     {%- endif -%}
-    <script src="{{ 'fancybox.umd.js' | asset_url }}" defer></script>
-    <script src="{{ 'fancybox.css' | asset_url }}" defer></script>
+    <script src="{{ 'jquery.js' | asset_url }}" defer></script>
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
-    <script src="{{ 'custom.js' | asset_url }}" defer></script>
     <script src="{{ 'vendors.js' | asset_url }}" defer></script>
 
     {% render 'popups' %}
@@ -407,36 +350,6 @@
                  {% include 'wcp_cart' %}
                {% endif %}
                <!-- WPD End -->
-
-    <!-- Meta description -->
-    <meta name="description" content="{{ page_description | default: shop.description | escape }}">
-
-    <!-- Optimize CSS loading -->
-    {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-    {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-
-    <!-- Image loading optimization -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const images = document.querySelectorAll('img[loading="lazy"]');
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              img.src = img.dataset.src;
-              img.classList.remove('lazy');
-              observer.unobserve(img);
-            }
-          });
-        });
-
-        images.forEach(img => {
-          if (img.dataset.src) {
-            imageObserver.observe(img);
-          }
-        });
-      });
-    </script>
   </body>
 
 <!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->
