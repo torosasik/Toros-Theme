@@ -1396,8 +1396,12 @@
                   </style>
 
 <script defer="defer">
+  // CRITICAL TEST - This should appear FIRST
+  console.log('🔥 CRITICAL: Script block is starting to execute');
+  console.log('🔥 CRITICAL: About to start document.ready');
   $(document).ready(function() {
     console.log("Document ready, calculator script loaded.");
+    console.log('🔥 CRITICAL: Inside document.ready function');
     
     // EMERGENCY V2 DEBUG TEST - This should ALWAYS appear!
     console.log('🚨🚨🚨 EMERGENCY V2 TEST: JavaScript execution reached this point!');
