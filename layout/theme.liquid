@@ -13,15 +13,16 @@
 {% include 'wp-page-speed-optimization-header' %}
 {% comment %}
   <head>
-{% comment %}EasylockdownHeadBegin{% endcomment %}{% capture elhRender %}{% render 'easylockdown_head', easylockdownRender: true, easylockdownOnlySpecialPriceSelector: easylockdownOnlySpecialPriceSelector, easylockdownCustomPriceSelector: easylockdownCustomPriceSelector %}{% endcapture %}{% assign elhRender = elhRender | split: '--elhResults--'%}{{ elhRender[0] }}{% comment %}EasylockdownHeadEnd{% endcomment %}
-{% include 'speedboostr-seo' %}
-{% include 'limespot' %}{% render 'yoast-seo' %}
+{% endcomment %}
+{% render 'yoast-seo' %}
+{% comment %}
 {% endcomment %}
   
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="">
+    <meta name="description" content="{{ page_description | default: shop.description | escape }}">
     {% if settings.show_canonical_url_collection and template.name == 'collection' %}
       {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
       {%- if disabled_by_yoast_seo -%}
@@ -204,63 +205,78 @@
   </script>
   {% endif %}
 
-  <!-- Preload critical resources -->
-  <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
-  <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
-  <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
-  <link rel="preload" href="{{ 'jquery.min.js' | asset_url }}" as="script">
+    <!-- Preload critical resources -->
+    <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
+    <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+    <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'jquery.min.js' | asset_url }}" as="script">
 
-  <!-- Meta description -->
-  <meta name="description" content="{{ page_description | default: shop.description | escape }}">
+    <!-- Optimize CSS loading -->
+    {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    {{ 'custom.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
 
-  <!-- Optimize CSS loading -->
-  {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    <!-- Critical JavaScript -->
+    <script src="{{ 'jquery.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
 
-  <!-- Critical JavaScript -->
-  <script src="{{ 'jquery.min.js' | asset_url }}" defer></script>
-  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <!-- Non-critical JavaScript -->
+    {% if template contains "product" %}
+      <link rel="stylesheet" href="{{ 'fancybox.css' | asset_url }}" media="print" onload="this.media='all'">
+      <script src="{{ 'fancybox.umd.js' | asset_url }}" defer></script>
+    {% endif %}
+    <script src="{{ 'custom.js' | asset_url }}" defer></script>
+    <script src="{{ 'vendors.js' | asset_url }}" defer></script>
 
-  <!-- Non-critical JavaScript -->
-  <script src="{{ 'fancybox.umd.js' | asset_url }}" defer></script>
-  <script src="{{ 'fancybox.css' | asset_url }}" defer></script>
-  <script src="{{ 'custom.js' | asset_url }}" defer></script>
-  <script src="{{ 'vendors.js' | asset_url }}" defer></script>
+    <!-- Image loading optimization -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Lazy load images
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src;
+              img.classList.remove('lazy');
+              observer.unobserve(img);
+            }
+          });
+        });
 
-  <!-- Image loading optimization -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Lazy load images
-      const images = document.querySelectorAll('img[loading="lazy"]');
-      const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.remove('lazy');
-            observer.unobserve(img);
+        images.forEach(img => {
+          if (img.dataset.src) {
+            imageObserver.observe(img);
           }
         });
       });
+    </script>
 
-      images.forEach(img => {
-        if (img.dataset.src) {
-          imageObserver.observe(img);
-        }
-      });
+    <!-- Defer non-critical scripts -->
+    <script>
+      window.deferScripts = function() {
+        const scripts = [
+          { src: '{{ "theme-editor-alpine-custom.js" | asset_url }}', async: true },
+          { src: '{{ "theme-editor.js" | asset_url }}', async: true }
+        ];
 
-      // Preload critical images
-      const criticalImages = document.querySelectorAll('img[loading="eager"]');
-      criticalImages.forEach(img => {
-        if (img.dataset.src) {
-          img.src = img.dataset.src;
-        }
-      });
-    });
-  </script>
+        scripts.forEach(script => {
+          const s = document.createElement('script');
+          s.src = script.src;
+          s.async = script.async;
+          document.body.appendChild(s);
+        });
+      };
+
+      if (document.readyState === 'complete') {
+        window.deferScripts();
+      } else {
+        window.addEventListener('load', window.deferScripts);
+      }
+    </script>
 </head>
   <body
-    class="gradient  overflow-x-hidden text-[{{ settings.text_base_size | times: 0.007875 }}rem] md:text-[{{ settings.text_base_size | times: 0.00875 }}rem]{% if settings.lang_direction contains request.locale.iso_code %} rtl{% endif %}"
+    class="gradient overflow-x-hidden text-[{{ settings.text_base_size | times: 0.007875 }}rem] md:text-[{{ settings.text_base_size | times: 0.00875 }}rem]{% if settings.lang_direction contains request.locale.iso_code %} rtl{% endif %}"
     x-data
     :class="$store.xPopup.open && 'overflow-hidden padding-scrollbar'"
   >
@@ -290,8 +306,7 @@
       role="main"
       tabindex="-1"
     >
-      {% comment %}{{ content_for_layout }}{% endcomment %}{{ content_for_layout }}
-<limespot></limespot>
+      {{ content_for_layout }}
     </main>
 
     {% case settings.selected_preset %}
@@ -340,7 +355,6 @@
     </script>
     {{ 'ajaxify.css' | asset_url | stylesheet_tag }}
     {{ 'ajaxify.js' | asset_url | script_tag }}
-    {{ 'spreadrwidget.js' | asset_url | script_tag }}
     <!-- 
     <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -374,60 +388,6 @@
       }
     </style>
     <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/mJcMHu3TQ8Y8YW6mVRrtdGwVa48lPPJTHuSztL5s" async></script>
-  <!-- WPD Start -->
-                {% if customer.tags.size > 0 and template != 'cart' %}
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                      let checkoutbtninterval = setInterval(function(){
-                        var x=document.querySelectorAll("input[name='checkout'], button[name='checkout'], input[name='goto_pp'], button[name='goto_pp'], input[name='goto_gc'], button[name='goto_gc'], [href$='checkout']");
-                        var WPD_RedirectToCart = function(e) {
-                          	e.stopPropagation();
-                            e.preventDefault();
-                            window.location = '/cart';
-                            };
-                            for (var i = 0; i < x.length; i++) {
-                                x[i].addEventListener('click', WPD_RedirectToCart, false);
-                            }
-                        },500)
-                });
-              </script>
-               {% endif %}
-         
-
-               {% if customer.tags.size > 0 and template == 'cart' %}
-                 {% include 'wcp_cart' %}
-               {% endif %}
-               <!-- WPD End -->
-
-    <!-- Meta description -->
-    <meta name="description" content="{{ page_description | default: shop.description | escape }}">
-
-    <!-- Optimize CSS loading -->
-    {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-    {{ 'theme.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-
-    <!-- Image loading optimization -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const images = document.querySelectorAll('img[loading="lazy"]');
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              img.src = img.dataset.src;
-              img.classList.remove('lazy');
-              observer.unobserve(img);
-            }
-          });
-        });
-
-        images.forEach(img => {
-          if (img.dataset.src) {
-            imageObserver.observe(img);
-          }
-        });
-      });
-    </script>
   </body>
 
 <!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->
