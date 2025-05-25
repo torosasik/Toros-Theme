@@ -31,8 +31,6 @@
   else
     assign is_rtl = false
   endif
-  # For best performance, keep products_per_page at or below 16
-  assign products_per_page = 16
 -%}
 <div class="full-width subcollection--wrapper">
 {% if section.settings.collection_label != blank %}
@@ -104,6 +102,7 @@
     {% endif %}
   >
     {%- liquid
+      assign products_per_page = 20
       assign columns_desktop = section.settings.products_per_page | split: ';'
       assign number_products = blank
       assign param = blank
@@ -210,7 +209,7 @@
               class="pb-10 border-b border-solid grid grid-cols-{{ section.settings.products_per_row_on_mobile }} md:grid-cols-2 lg:grid-cols-{{ section.settings.products_per_row_on_desktop }} gap-{{ section.id }} md:list-layout:grid-cols-1"
             >
               
-              {%- for product in collection.products -%}
+              {%- for product in collection.products -%}{% comment %}EasylockdownFilterBegin{% endcomment %}{% capture easylockdownFilter %}{% render 'easylockdown_filter_collection' with product, easylockdownRender: true, easylockdownItemSelectorOff: easylockdownItemSelectorOff %}{% endcapture %}{% assign easylockdownFilter = easylockdownFilter | strip %}{% if easylockdownFilter == 'continue' %}{% continue %}{% else %}{{ easylockdownFilter }}{% endif %}{% comment %}EasylockdownFilterEnd{% endcomment %}
                 {% liquid
                   assign index = forloop.index
                   if forloop.index < 3
@@ -392,7 +391,7 @@
       "type": "text",
       "id": "products_per_page",
       "label": "t:sections.main-collection-product-grid.settings.products_per_page.label",
-      "info": "t:sections.main-collection-product-grid.settings.products_per_page.info (Recommended: 16-20 for best performance)"
+      "info": "t:sections.main-collection-product-grid.settings.products_per_page.info"
     },
     {
       "type": "paragraph",
