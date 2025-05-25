@@ -248,6 +248,9 @@
     },
     "main": {
       "type": "main-page",
+      "custom_css": [
+        ".globo-form-app {border-radius: 12px;}"
+      ],
       "settings": {
         "show_heading": false,
         "heading_size": 80,

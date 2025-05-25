@@ -30,7 +30,7 @@
 
 {% render 'section-divider' %}
 
-<div class="faq-container {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %}page-width{% else %}max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %}page-width{% endif %} ml-auto mr-auto relative pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
+<div class="faq-container {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} page-width{% endif %} ml-auto mr-auto relative pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
   {% if section.settings.image != blank %}
     <div class="flex gap-y-7{% if is_rtl %} ltr{% endif %}{% if section.settings.desktop_layout == "1" %} lg:gap-16{% else %} lg:gap-9{% endif %}{% if section.settings.image_alignment == "right" %} lg:flex-row-reverse{% else %} lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %}">
       {%- style -%}
@@ -44,10 +44,10 @@
         }
         {% if section.settings.mobile_height == 'auto' %}
           @media screen and (max-width: 1024px) {
-            .natural-image-mobile-{{ section.id }} {
-              height: 0;
-              padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%
-            }
+              .natural-image-mobile-{{ section.id }} {
+                height: 0;
+                padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%
+              }
           }
         {% endif %}
       {%- endstyle -%}
@@ -77,7 +77,6 @@
           </div>
         </div>
       </div>
-    </div>
   {% endif %}
   <div class="faq-wrapper{% if is_rtl %} rtl{% endif %}{% if section.settings.image != blank %}{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-2/3{% endif %}{% endif %}">
     <div class="mb-5 text-{{ section.settings.heading_alignment }}{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} heading-{{ section.settings.heading_alignment }}">
@@ -96,50 +95,54 @@
     
     <div class="{% if section.settings.desktop_layout == "2" %}md:grid md:grid-cols-2 gap-x-7{% endif %}">
       {%- for block in section.blocks -%}
-        {% if block.settings.heading and block.settings.row_content %}
-          <div class="faq-item{% unless section.settings.row_background %} border-b md:pt-0{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endunless %}" 
-            x-data="{open: false}"
-            {% if section.settings.collapsible %}:class="open && 'border-[rgba(var(--colors-heading))]'"{% endif %}
-            {{ block.shopify_attributes }}
-          >
-            <div class="p-3 md:px-4 lg:px-5 lg:py-[22px]{% if section.settings.row_background %} border-0 bg-[rgba(var(--colors-text),0.05)] md:mt-4{% endif %}">
-              <button 
-                class="faq-collapsible relative text-left block w-full{% if section.settings.collapsible %} cursor-pointer{% endif %} flex items-center"
-                {% if section.settings.collapsible %}@click="open = !open"{% endif %}
-              >
-                {%- unless block.settings.icon == "none" -%}
-                  <div class="flex items-center">
-                    <span class="inline-block mr-2 md:mr-3 h-5 w-5 md:h-7 md:w-7 rtl:ml-2 rtl:mr-0">
-                      {% if block.settings.custom_icon == blank %}
-                        {% render 'icon-labels-bags', icon: block.settings.icon %}
-                      {% else %}
-                        {{ block.settings.custom_icon }}
-                      {% endif %}
-                    </span>
-                  </div>
-                {%- endunless -%}
-                <p class="{% if section.settings.desktop_layout == "1" and section.settings.image == blank and section.settings.make_full_page_width %} h3{% else %}md:text-[110%]{% endif %} min-h-[20px] md:min-h-[28px] flex items-center max-w-full{% if section.settings.collapsible %} pr-6 rtl:pl-6 rtl:pr-0{% endif %} font-medium">
-                  {{ block.settings.heading | default: block.settings.page.title }}
-                </p>
-                {%- if section.settings.collapsible -%}
-                  <span class="w-2.5 duration-300 inline-block absolute{% if settings.lang_direction contains request.locale.iso_code %} left-2 md:left-4{% else %} right-2 md:right-4{% endif %}" :class="open && 'rotate-180'">
-                    {% render 'icon-alls', icon: 'icon-caret' %}
+        {%  if block.settings.heading and block.settings.row_content %}
+        <div class="faq-item{% unless section.settings.row_background %} border-b md:pt-0{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endunless %}" 
+          x-data="{open: false}"
+          {% if section.settings.collapsible %}
+            :class="open && 'border-[rgba(var(--colors-heading))]'"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
+        <div class="p-3 md:px-4 lg:px-5 lg:py-[22px]{% if section.settings.row_background %} border-0 bg-[rgba(var(--colors-text),0.05)] md:mt-4{% endif %}">
+            <button 
+              class="faq-collapsible relative text-left block w-full{% if section.settings.collapsible %} cursor-pointer{% endif %} flex items-center"
+              {% if section.settings.collapsible %} 
+                @click="open = !open"
+              {% endif %}
+            >
+              {%- unless block.settings.icon == "none" -%}
+                <div class="flex items-center">
+                  <span class="inline-block mr-2 md:mr-3 h-5 w-5 md:h-7 md:w-7 rtl:ml-2 rtl:mr-0">
+                    {% if block.settings.custom_icon == blank %}
+                      {% render 'icon-labels-bags', icon: block.settings.icon %}
+                    {% else %}
+                      {{ block.settings.custom_icon }}
+                    {% endif %}
                   </span>
-                {%- endif -%}
-              </button>
-              <div class="faq-content" 
-                {% if section.settings.collapsible %}
-                  x-show="open"
-                  x-cloak
-                  x-collapse
-                {% endif %}
-              >
-                <div class="rte leading-normal pt-2 rte">
-                  {{ block.settings.row_content }}
                 </div>
+              {%- endunless -%}
+              <p class="{% if section.settings.desktop_layout == "1" and section.settings.image == blank and section.settings.make_full_page_width %} h3{% else %}md:text-[110%]{% endif %} min-h-[20px] md:min-h-[28px] flex items-center max-w-full{% if section.settings.collapsible %} pr-6 rtl:pl-6 rtl:pr-0{% endif %} font-medium">
+                {{ block.settings.heading | default: block.settings.page.title }}
+              </p>
+              {%- if section.settings.collapsible -%}
+                <span class="w-2.5 duration-300 inline-block absolute{% if settings.lang_direction contains request.locale.iso_code %} left-2 md:left-4{% else %} right-2 md:right-4{% endif %}" :class="open && 'rotate-180'">
+                  {% render 'icon-alls', icon: 'icon-caret' %}
+                </span>
+              {%- endif -%}
+            </button>
+            <div class="faq-content" 
+              {% if section.settings.collapsible %}
+                x-show="open"
+                x-cloak
+                x-collapse
+              {% endif %}
+            >
+              <div class="rte leading-normal pt-2 rte">
+                {{ block.settings.row_content }}
               </div>
             </div>
           </div>
+        </div>
         {% endif %}
       {%- endfor -%}
     </div>
@@ -153,6 +156,7 @@
       </div>
     {%- endif -%}
   </div>
+  {% if section.setting.image != blank %}</div>{% endif %}
 </div>
 
 {% if section.settings.enable_microdata_schema %}
