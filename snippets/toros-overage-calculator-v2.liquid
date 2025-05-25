@@ -7,7 +7,25 @@
   assign v2_product_price = current_variant.price | default: product.price
 -%}
 
+<!-- DEBUG: Start of V2 Calculator Snippet -->
+<script>
+console.log('🔍 TOROS V2 DEBUG: Snippet file is loading...');
+console.log('🔍 TOROS V2 DEBUG: Product object exists:', typeof product !== 'undefined');
+{% if product %}
+console.log('🔍 TOROS V2 DEBUG: Product title:', '{{ product.title | escape }}');
+console.log('🔍 TOROS V2 DEBUG: Product tags:', '{{ product.tags | join: ", " }}');
+console.log('🔍 TOROS V2 DEBUG: Looking for tag: overage-popup-v2');
+console.log('🔍 TOROS V2 DEBUG: Tag check result:', {{ product.tags contains 'overage-popup-v2' | json }});
+{% else %}
+console.log('🔍 TOROS V2 DEBUG: Product object is not available!');
+{% endif %}
+</script>
+
 {% if product.tags contains 'overage-popup-v2' %}
+<script>
+console.log('✅ TOROS V2 DEBUG: Tag condition passed! Starting HTML/CSS render...');
+</script>
+
 <style>
   #toros-v2-ovg-popup {
     position: fixed;
@@ -353,23 +371,30 @@
 </div>
 
 <script>
+console.log('🎯 TOROS V2 DEBUG: HTML rendered! Starting JavaScript initialization...');
+
 // Use an immediately invoked function expression (IIFE) to execute immediately, regardless of DOM state
 (function() {
-  console.log('Toros V2: Script initializing...');
+  console.log('🚀 TOROS V2 DEBUG: IIFE started');
+  console.log('🚀 TOROS V2 DEBUG: Document ready state:', document.readyState);
+  console.log('🚀 TOROS V2 DEBUG: Section ID from Liquid:', '{{ section.id }}');
   
   // Function to initialize the V2 calculator
   function initTorosV2Calculator() {
     try {
-      console.log('Toros V2: Starting initialization...');
+      console.log('🔧 TOROS V2 DEBUG: Starting initialization function...');
       
       // Ensure this script only runs if the V2 popup HTML is actually on the page
       const v2Popup = document.getElementById('toros-v2-ovg-popup');
+      console.log('🔧 TOROS V2 DEBUG: Looking for popup element...');
+      console.log('🔧 TOROS V2 DEBUG: Popup element found:', !!v2Popup);
+      
       if (!v2Popup) {
-        console.log('Toros V2: Popup element not found, exiting');
+        console.error('❌ TOROS V2 DEBUG: Popup element not found, exiting');
         return; // V2 popup not present, do nothing
       }
 
-      console.log('Toros V2: Popup element found, continuing...');
+      console.log('✅ TOROS V2 DEBUG: Popup element found, continuing...');
 
       let overageSetV2 = false;
       // JavaScript variables from Liquid
@@ -378,18 +403,25 @@
       const v2_tiles_per_box = {{ v2_tiles_per_box | default: 1 }};
       const v2_max_allowed_qty = {{ v2_max_qty | default: 10000 }};
 
-      console.log('Toros V2: Configuration loaded - Price:', v2_product_price, 'Box Dimensions:', v2_box_dimensions, 'Tiles per box:', v2_tiles_per_box, 'Max qty:', v2_max_allowed_qty);
+      console.log('📊 TOROS V2 DEBUG: Configuration loaded:');
+      console.log('   - Price:', v2_product_price);
+      console.log('   - Box Dimensions:', v2_box_dimensions);
+      console.log('   - Tiles per box:', v2_tiles_per_box);
+      console.log('   - Max qty:', v2_max_allowed_qty);
 
       // --- Start: Overage V2 Pop-up Trigger via Add to Cart Button ---
       const atcButtonSelectorById = '#x-atc-button-{{ section.id }}';
+      console.log('🎯 TOROS V2 DEBUG: Expected ATC button selector:', atcButtonSelectorById);
+      
       let mainATCButton = document.querySelector(atcButtonSelectorById);
-      console.log('Toros V2: Attempting to find ATC button. Expected section.id: {{ section.id }}');
-      console.log('Toros V2: ATC button selector by ID:', atcButtonSelectorById);
+      console.log('🎯 TOROS V2 DEBUG: ATC button found by ID:', !!mainATCButton);
 
       if (mainATCButton) {
-        console.log('Toros V2: Found ATC button by ID:', mainATCButton);
+        console.log('✅ TOROS V2 DEBUG: Found ATC button by ID:', mainATCButton);
+        console.log('✅ TOROS V2 DEBUG: Button text:', mainATCButton.textContent?.trim());
+        console.log('✅ TOROS V2 DEBUG: Button parent:', mainATCButton.parentElement);
       } else {
-        console.log('Toros V2: ATC button NOT found by ID. Trying generic selectors...');
+        console.log('⚠️ TOROS V2 DEBUG: ATC button NOT found by ID. Trying generic selectors...');
         
         // Multiple fallback selectors
         const selectors = [
@@ -402,48 +434,72 @@
           '.product-form__buttons button[type="submit"]'
         ];
         
+        console.log('🔍 TOROS V2 DEBUG: Trying fallback selectors:', selectors);
+        
         for (let selector of selectors) {
           mainATCButton = document.querySelector(selector);
+          console.log(`🔍 TOROS V2 DEBUG: Trying "${selector}":`, !!mainATCButton);
           if (mainATCButton) {
-            console.log('Toros V2: Found ATC button with selector "' + selector + '":', mainATCButton);
+            console.log('✅ TOROS V2 DEBUG: Found ATC button with selector "' + selector + '":', mainATCButton);
+            console.log('✅ TOROS V2 DEBUG: Button text:', mainATCButton.textContent?.trim());
             break;
           }
         }
         
         if (!mainATCButton) {
-          console.error('Toros V2: Main ATC button not found with any selector. Available buttons:');
-          console.log(document.querySelectorAll('button'));
+          console.error('❌ TOROS V2 DEBUG: Main ATC button not found with any selector');
+          console.log('🔍 TOROS V2 DEBUG: Available buttons on page:');
+          const allButtons = document.querySelectorAll('button');
+          allButtons.forEach((btn, index) => {
+            console.log(`   Button ${index}:`, btn.textContent?.trim(), btn);
+          });
+          
+          console.log('🔍 TOROS V2 DEBUG: Available elements with name="add":');
+          const addElements = document.querySelectorAll('[name="add"]');
+          addElements.forEach((el, index) => {
+            console.log(`   Element ${index}:`, el.textContent?.trim(), el);
+          });
+          
           return; // Exit if no button is found
         }
       }
 
       // This logic assumes the product has the 'overage-popup-v2' tag (checked by the outer Liquid if statement)
       if (mainATCButton && mainATCButton.parentElement) {
+        console.log('🔧 TOROS V2 DEBUG: Creating overlay element...');
         const overlayV2 = document.createElement('div');
         overlayV2.id = 'toros-v2-overage-submit';
+        
+        console.log('🔧 TOROS V2 DEBUG: Setting parent position...');
         mainATCButton.parentElement.style.position = 'relative'; // Ensure parent can host absolute overlay
+        
+        console.log('🔧 TOROS V2 DEBUG: Appending overlay to parent...');
         mainATCButton.parentElement.appendChild(overlayV2);
         
-        console.log('Toros V2: Overlay created and attached to ATC button');
+        console.log('✅ TOROS V2 DEBUG: Overlay created and attached to ATC button');
+        console.log('✅ TOROS V2 DEBUG: Overlay element:', document.getElementById('toros-v2-overage-submit'));
 
         overlayV2.addEventListener('click', function(e) {
-          console.log('Toros V2: Overlay clicked');
+          console.log('🎉 TOROS V2 DEBUG: Overlay clicked!');
           e.preventDefault(); // Prevent any default action
           e.stopPropagation(); // Stop event from bubbling to the actual ATC button immediately
           
           const currentSqFtInput = document.getElementById('squared_size');
           const v2CalculatorFootageInput = document.getElementById('toros-v2-ovg-calculator-footage');
+          console.log('🔧 TOROS V2 DEBUG: squared_size element:', !!currentSqFtInput);
+          console.log('🔧 TOROS V2 DEBUG: calculator footage input:', !!v2CalculatorFootageInput);
+          
           if (currentSqFtInput && v2CalculatorFootageInput) {
               v2CalculatorFootageInput.value = currentSqFtInput.value;
-              console.log('Toros V2: Pre-filled footage from squared_size:', currentSqFtInput.value);
+              console.log('✅ TOROS V2 DEBUG: Pre-filled footage from squared_size:', currentSqFtInput.value);
           }
 
           if (!overageSetV2) {
-            console.log('Toros V2: Opening popup (overage not set)');
+            console.log('🎯 TOROS V2 DEBUG: Opening popup (overage not set)');
             document.documentElement.classList.add('toros-v2-overflow-pop-hidden');
             v2Popup.classList.add('toros-v2-ovg-popup-open');
           } else {
-            console.log('Toros V2: Overage already set, proceeding to ATC');
+            console.log('🎯 TOROS V2 DEBUG: Overage already set, proceeding to ATC');
             // Overage V2 already set, proceed to click the real ATC button
             if(mainATCButton.click) {
                 mainATCButton.click();
@@ -452,6 +508,8 @@
             }
           }
         });
+        
+        console.log('✅ TOROS V2 DEBUG: Overlay click listener attached');
       }
       // --- End: Overage V2 Pop-up Trigger ---
 
@@ -459,25 +517,32 @@
       const v2PopupContent = document.getElementById('toros-v2-ovg-popup-content');
       const v2CloseButton = document.getElementById('toros-v2-ovg-popup-close');
 
+      console.log('🔧 TOROS V2 DEBUG: Popup content element:', !!v2PopupContent);
+      console.log('🔧 TOROS V2 DEBUG: Close button element:', !!v2CloseButton);
+
       if (v2CloseButton) {
         v2CloseButton.addEventListener('click', function() {
-          console.log('Toros V2: Close button clicked');
+          console.log('🎯 TOROS V2 DEBUG: Close button clicked');
           v2Popup.classList.remove('toros-v2-ovg-popup-open');
           document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
         });
+        console.log('✅ TOROS V2 DEBUG: Close button listener attached');
       }
 
       // Close popup if clicked outside content area
       v2Popup.addEventListener('click', function(event) {
         if (v2PopupContent && !v2PopupContent.contains(event.target)) {
-          console.log('Toros V2: Clicked outside popup, closing');
+          console.log('🎯 TOROS V2 DEBUG: Clicked outside popup, closing');
           v2Popup.classList.remove('toros-v2-ovg-popup-open');
           document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
         }
       });
 
       // Manual input radio button handling
-      document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
+      const radioButtons = document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]');
+      console.log('🔧 TOROS V2 DEBUG: Radio buttons found:', radioButtons.length);
+      
+      radioButtons.forEach(radio => {
         radio.addEventListener('change', function () {
           const manualInputFieldV2 = document.getElementById('toros-v2-manual-ovg-input');
           if (this.value === 'manual') {
@@ -488,6 +553,8 @@
           }
         });
       });
+      
+      console.log('✅ TOROS V2 DEBUG: Radio button listeners attached');
       // --- End: V2 Pop-up Event Listeners ---
 
       // --- Start: V2 Calculation Logic ---
@@ -512,7 +579,7 @@
       }
 
       function calculateOverageV2() {
-        console.log('Toros V2: Calculate function called');
+        console.log('🧮 TOROS V2 DEBUG: Calculate function called');
         if (v2_box_dimensions <= 0) {
             alert('Product box dimensions are not configured correctly.');
             return;
@@ -568,24 +635,28 @@
         }
 
         overageSetV2 = true;
-        console.log('Toros V2: Calculation complete. Boxes needed:', boxes_needed, 'Overage set to true');
+        console.log('✅ TOROS V2 DEBUG: Calculation complete. Boxes needed:', boxes_needed, 'Overage set to true');
       }
 
       const calculateBtnV2 = document.getElementById('toros-v2-ovg-calculate');
+      console.log('🔧 TOROS V2 DEBUG: Calculate button element:', !!calculateBtnV2);
+      
       if (calculateBtnV2) {
         calculateBtnV2.addEventListener('click', function(e){
           e.preventDefault();
           calculateOverageV2();
         });
-        console.log('Toros V2: Calculate button listener attached');
+        console.log('✅ TOROS V2 DEBUG: Calculate button listener attached');
       }
       // --- End: V2 Calculation Logic ---
 
       // --- Start: V2 Add to Cart from Pop-up ---
       const addToCartBtnV2 = document.getElementById('toros-v2-ovg-addToquanitity');
+      console.log('🔧 TOROS V2 DEBUG: Add to cart button element:', !!addToCartBtnV2);
+      
       if (addToCartBtnV2) {
         addToCartBtnV2.addEventListener('click', function(e){
-          console.log('Toros V2: Add to cart button clicked');
+          console.log('🛒 TOROS V2 DEBUG: Add to cart button clicked');
           e.preventDefault();
           let calculated_boxes = parseFloat(document.getElementById('toros-v2-ovg-boxes').value) || 0;
 
@@ -611,7 +682,7 @@
           v2Popup.classList.remove('toros-v2-ovg-popup-open');
           document.documentElement.classList.remove('toros-v2-overflow-pop-hidden');
           
-          console.log('Toros V2: Triggering final ATC button click');
+          console.log('🎯 TOROS V2 DEBUG: Triggering final ATC button click');
           if(mainATCButton) {
               if(mainATCButton.click) {
                   mainATCButton.click();
@@ -620,33 +691,47 @@
               }
           }
         });
-        console.log('Toros V2: Add to cart button listener attached');
+        console.log('✅ TOROS V2 DEBUG: Add to cart button listener attached');
       }
       // --- End: V2 Add to Cart from Pop-up ---
 
       // Initialize manual input field visibility
       const v2ManualInputContainer = document.getElementById('toros-v2-manual-ovg-input');
+      console.log('🔧 TOROS V2 DEBUG: Manual input container:', !!v2ManualInputContainer);
+      
       document.querySelectorAll('#toros-v2-ovg-overage input[name="properties[TOROS_V2_OVERAGE]"]').forEach(radio => {
         if (radio.checked && radio.value === 'manual' && v2ManualInputContainer) {
           v2ManualInputContainer.style.display = 'block';
         }
       });
 
-      console.log('Toros V2: Initialization complete!');
+      console.log('🎉 TOROS V2 DEBUG: Initialization complete!');
+      console.log('🎉 TOROS V2 DEBUG: Summary - Elements found:');
+      console.log('   - Popup:', !!v2Popup);
+      console.log('   - ATC Button:', !!mainATCButton);
+      console.log('   - Overlay:', !!document.getElementById('toros-v2-overage-submit'));
+      console.log('   - Calculate Button:', !!calculateBtnV2);
+      console.log('   - Add to Cart Button:', !!addToCartBtnV2);
       
     } catch (error) {
-      console.error('Toros V2: Error during initialization:', error);
+      console.error('💥 TOROS V2 DEBUG: Error during initialization:', error);
+      console.error('💥 TOROS V2 DEBUG: Error stack:', error.stack);
     }
   }
 
   // Execute immediately if DOM is ready, otherwise wait for it
   if (document.readyState === 'loading') {
-    console.log('Toros V2: DOM still loading, waiting for DOMContentLoaded...');
+    console.log('⏳ TOROS V2 DEBUG: DOM still loading, waiting for DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', initTorosV2Calculator);
   } else {
-    console.log('Toros V2: DOM already loaded, initializing immediately...');
+    console.log('⚡ TOROS V2 DEBUG: DOM already loaded, initializing immediately...');
     initTorosV2Calculator();
   }
 })();
 </script> 
+{% else %}
+<script>
+console.log('❌ TOROS V2 DEBUG: Tag condition FAILED! Product does not have overage-popup-v2 tag');
+console.log('❌ TOROS V2 DEBUG: Current product tags:', '{{ product.tags | join: ", " }}');
+</script>
 {% endif %}
