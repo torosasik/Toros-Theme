@@ -4747,12 +4747,12 @@
     $(document).ready(function() {
       // Remove any previous handler to avoid duplicates
       $(document).off('click.torosV2');
-      // Use event delegation for dynamic content
-      $(document).on('click.torosV2', '#x-atc-button-{{ section.id }}', function(e) {
+      // Attach to any button with name="add" inside #atc-btn-wrap for this product
+      $(document).on('click.torosV2', '#atc-btn-wrap button[name="add"]', function(e) {
         e.preventDefault();
         alert('🛠 TOROS V2 test popup');
       });
-      console.log('🔔 TOROS V2: jQuery delegated popup handler attached');
+      console.log('🔔 TOROS V2: Universal ATC handler attached');
     });
   </script>
 {% endif %}
