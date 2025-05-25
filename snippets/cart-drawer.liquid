@@ -1045,7 +1045,7 @@
                 role="status"
               >
                 <p>{{ 'sections.cart.subtotal' | t }}</p>
-                <p class="{% if is_rtl %} mr-8{% else %} ml-8{% endif %}" id="total-price" bss-b2b-cart-total-price>
+                <p class="{% if is_rtl %} mr-8{% else %} ml-8{% endif %}" id="total-price">
                   {{ cart.total_price | money_with_currency }}
                 </p>
               </div>

@@ -47,12 +47,12 @@
             <div class="w-full mb-5{% unless block.settings.show_background %} pr-7 pl-7 border border-solid{% endunless %}">
               <template x-for="(item,index) in Object.values(productsList)" :key="index">
                 <div 
-                  class="w-full flex bundler-product relative gap-4 pt-5 pb-5{% if block.settings.show_background %} bg-[rgba(var(--colors-background-secondary))] mt-1.5 mb-1.5 pl-5 pr-5{% if show_rounded_image %} rounded-[10px]{% endif %}{% else %} border-b border-solid last:border-b-0{% endif %}"
+                  class="w-full flex frequently-bought-product relative gap-4 pt-5 pb-5{% if block.settings.show_background %} bg-[rgba(var(--colors-background-secondary))] mt-1.5 mb-1.5 pl-5 pr-5{% if show_rounded_image %} rounded-[10px]{% endif %}{% else %} border-b border-solid last:border-b-0{% endif %}"
                   x-data="{ 
                     item: JSON.parse(JSON.stringify(item))
                   }"
                 >
-                  <div class="bundler-product-image min-w-[84px] w-[84px] h-[84px] relative">
+                  <div class="frequently-bought-product-image min-w-[84px] w-[84px] h-[84px] relative">
                     <a x-bind:href="item.productUrl" class="block disable-effect w-full">
                       <div class="relative w-full overflow-hidden float-left before:h-0 before:block before:pb-[100.0%]{% if show_rounded_image %} rounded-md{% endif %}">
                         <img
