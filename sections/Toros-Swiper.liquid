@@ -1,6 +1,193 @@
-{% schema %}
-  {
-    "name": "Section name",
-    "settings": []
+{% comment %}
+  Toros Swiper - Modern Minimal Customizer Version
+  Features: card aspect ratio, gap, shadow, button color, border radius, slides per view.
+{% endcomment %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+  .toros-swiper-section {
+    padding: 0;
+    margin: 0 auto 36px auto;
+    background: transparent;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
+  .toros-swiper-section .swiper {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  .toros-swiper-section .swiper-wrapper {
+    gap: {{ section.settings.slide_gap }}px;
+  }
+  .toros-swiper-section .swiper-slide {
+    background: #fff;
+    border-radius: {{ section.settings.slide_radius }}px;
+    box-shadow: 0 8px 32px rgba(0,0,0, {{ section.settings.slide_shadow_opacity | divided_by: 100.0 }});
+    overflow: hidden;
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    border: none;
+    min-width: 0;
+  }
+  .toros-swiper-section .swiper-slide img {
+    display: block;
+    width: 100%;
+    {% case section.settings.card_aspect_ratio %}
+      {% when 'square' %}
+        aspect-ratio: 1/1;
+        max-width: 340px;
+      {% when 'portrait' %}
+        aspect-ratio: 4/5;
+        max-width: 340px;
+      {% when 'landscape' %}
+        aspect-ratio: 16/9;
+        max-width: 420px;
+    {% endcase %}
+    object-fit: cover;
+    border-radius: {{ section.settings.slide_radius }}px {{ section.settings.slide_radius }}px 0 0;
+    margin: 0 auto;
+    background: #f4f4f4;
+  }
+  .toros-swiper-section .slide-label {
+    margin: 10px auto 0 auto;
+    padding: 7px 18px;
+    border-radius: 16px;
+    background: #f5f8fc;
+    color: #232323;
+    font-size: 18px;
+    font-weight: 500;
+    max-width: 220px;
+    white-space: normal;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .toros-swiper-section .swiper-btn {
+    margin: 16px auto 10px auto;
+    display: inline-block;
+    background: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_color }};
+    border-radius: {{ section.settings.button_radius }}px;
+    padding: 8px 22px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+    transition: background 0.2s, color 0.2s;
+  }
+  .toros-swiper-section .swiper-btn:hover {
+    background: {{ section.settings.button_hover_color }};
+    color: {{ section.settings.button_color }};
+  }
+  .toros-swiper-section .swiper-button-next,
+  .toros-swiper-section .swiper-button-prev {
+    color: #232323;
+    background: #fff;
+    border-radius: 50%;
+    border: 1.5px solid #ededed;
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>
+
+<div class="toros-swiper-section">
+  <div class="swiper toros-mosaic-slider">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <a href="{{ block.settings.collection_url }}">
+            {% if block.settings.collection_image != blank %}
+              <img src="{{ block.settings.collection_image | img_url: '600x' }}" alt="{{ block.settings.collection_label }}">
+            {% endif %}
+            <div class="slide-label">{{ block.settings.collection_label }}</div>
+            {% if block.settings.button_text != blank %}
+              <a href="{{ block.settings.button_url }}" class="swiper-btn">{{ block.settings.button_text }}</a>
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  setTimeout(function() {
+    new Swiper('.toros-mosaic-slider', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: {{ section.settings.slides_per_view }},
+      spaceBetween: {{ section.settings.slide_gap }},
+      loop: true,
+      coverflowEffect: {
+        rotate: 26,
+        stretch: 0,
+        depth: 140,
+        modifier: 1,
+        slideShadows: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        0: { slidesPerView: 1.3, spaceBetween: {{ section.settings.slide_gap }} },
+        600: { slidesPerView: 2, spaceBetween: {{ section.settings.slide_gap }} },
+        900: { slidesPerView: 3, spaceBetween: {{ section.settings.slide_gap }} },
+        1200: { slidesPerView: {{ section.settings.slides_per_view }}, spaceBetween: {{ section.settings.slide_gap }} }
+      }
+    });
+  }, 100);
+</script>
+
+{% schema %}
+{
+  "name": "Toros Swiper",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "slides_per_view", "label": "Slides Per View", "min": 1, "max": 8, "default": 4 },
+    { "type": "range", "id": "slide_gap", "label": "Gap Between Slides (px)", "min": 0, "max": 60, "default": 20 },
+    { "type": "range", "id": "slide_radius", "label": "Card Border Radius (px)", "min": 0, "max": 40, "default": 20 },
+    { "type": "color", "id": "slide_shadow_color", "label": "Slide Shadow Color (not used in demo, set below)", "default": "#000000" },
+    { "type": "range", "id": "slide_shadow_opacity", "label": "Slide Shadow Opacity (%)", "min": 0, "max": 50, "default": 13 },
+    { "type": "select", "id": "card_aspect_ratio", "label": "Card Aspect Ratio", "options": [
+      { "value": "square", "label": "Square (1:1)" },
+      { "value": "portrait", "label": "Portrait (4:5)" },
+      { "value": "landscape", "label": "Landscape (16:9)" }
+    ], "default": "portrait" },
+    { "type": "color", "id": "button_bg", "label": "Button Background Color", "default": "#1C4170" },
+    { "type": "color", "id": "button_color", "label": "Button Text Color", "default": "#FFFFFF" },
+    { "type": "color", "id": "button_hover_color", "label": "Button Hover Color", "default": "#E1E7F5" },
+    { "type": "range", "id": "button_radius", "label": "Button Corner Radius (px)", "min": 0, "max": 40, "default": 16 }
+  ],
+  "blocks": [
+    {
+      "type": "collection_slide",
+      "name": "Collection Slide",
+      "settings": [
+        { "type": "url", "id": "collection_url", "label": "Collection Link" },
+        { "type": "image_picker", "id": "collection_image", "label": "Collection Image" },
+        { "type": "text", "id": "collection_label", "label": "Collection Name" },
+        { "type": "text", "id": "button_text", "label": "Button Text" },
+        { "type": "url", "id": "button_url", "label": "Button URL" }
+      ]
+    }
+  ],
+  "max_blocks": 15,
+  "presets": [
+    { "name": "Toros Swiper", "category": "Custom" }
+  ]
+}
 {% endschema %}
