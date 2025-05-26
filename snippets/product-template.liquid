@@ -1618,6 +1618,10 @@
     $('#manualInputFieldOVG').on('input', function() {
       calculateOverage();
     });
+    // Auto-calculate when an overage radio is clicked
+    $('#ovg-overage-selectors input[type="radio"]').on('change', function() {
+      calculateOverage();
+    });
   });
 </script>
 

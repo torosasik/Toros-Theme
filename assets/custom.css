@@ -189,33 +189,38 @@
 }
 #ovg-popup-content {
   background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 6px 32px rgba(74, 144, 226, 0.10), 0 1.5px 6px rgba(0,0,0,0.06);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(74, 144, 226, 0.13), 0 2px 8px rgba(0,0,0,0.06);
   padding: 0;
-  max-width: 340px;
+  max-width: 370px;
   width: 100%;
   overflow: hidden;
   font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-#ovg-popup-content .heading,
-#ovg-popup-content .section-intro {
-  margin: 0;
-  padding: 0;
-}
-#ovg-popup-content .popup-header,
-#ovg-popup-content .bg-blue {
+#ovg-popup-content .popup-header {
   background: #4a90e2;
   color: #fff;
-  padding: 18px 18px 8px 18px;
+  padding: 22px 22px 8px 22px;
   text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 18px 18px 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  border-radius: 20px 20px 0 0;
+  letter-spacing: 0.01em;
+}
+#ovg-popup-content .popup-header p {
+  color: #eaf2fb;
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin-top: 4px;
+  margin-bottom: 0;
 }
 #ovg-popup-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 18px;
+  right: 18px;
   background: transparent;
   color: #fff;
   border-radius: 50%;
@@ -232,48 +237,71 @@
   height: 24px;
   stroke: #fff !important;
 }
-#ovg-popup-content .section-intro {
-  padding: 0 18px 8px 18px;
-  color: #4a90e2;
-  font-size: 0.98rem;
-  text-align: center;
-}
-#ovg-popup-content .flex-box {
-  justify-content: center;
-  padding: 0 18px 0 18px;
+#ovg-popup-content .input-section {
+  width: 100%;
+  padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #ovg-popup-content .input-box input {
   border: 1.5px solid #e0e7ef;
-  border-radius: 10px;
-  padding: 10px 8px;
-  font-size: 1.1rem;
+  border-radius: 14px;
+  padding: 18px 8px;
+  font-size: 2rem;
   text-align: center;
   width: 100%;
   outline: none;
+  background: #fff;
+  font-weight: 500;
+  margin-bottom: 0;
   transition: border 0.2s, box-shadow 0.2s;
 }
 #ovg-popup-content .input-box input:focus {
   border-color: #4a90e2;
   box-shadow: 0 0 0 2px #e3f0fc;
 }
+#ovg-popup-content .input-label {
+  color: #7b8591;
+  font-size: 1.05rem;
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+#ovg-popup-content .overage-label {
+  font-weight: 700;
+  font-size: 1.18rem;
+  color: #232b36;
+  margin: 24px 0 10px 0;
+  text-align: center;
+}
+#ovg-overage-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 10px;
+  margin-bottom: 0;
+  width: 100%;
+}
 #ovg-overage-selectors label {
-  margin: 0 4px 0 0;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 999px;
+  padding: 12px 0;
+  font-size: 1.08rem;
+  color: #232b36;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+  text-align: center;
+  min-width: 0;
+  min-height: 0;
 }
 #ovg-overage-selectors input[type="radio"] {
   accent-color: #4a90e2;
-  margin-right: 4px;
-}
-#ovg-overage-selectors label {
-  background: #fff;
-  border: 1.5px solid #e0e7ef;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 0.98rem;
-  color: #4a90e2;
-  cursor: pointer;
-  margin-bottom: 6px;
-  transition: background 0.2s, border 0.2s, color 0.2s;
+  margin-right: 8px;
 }
 #ovg-overage-selectors input[type="radio"]:checked + label,
 #ovg-overage-selectors label:has(input[type="radio"]:checked) {
@@ -281,24 +309,47 @@
   color: #fff;
   border-color: #4a90e2;
 }
+#manual-ovg-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
 #manual-ovg-input input {
   border: 1.5px solid #e0e7ef;
-  border-radius: 8px;
-  padding: 8px 6px;
+  border-radius: 10px;
+  padding: 10px 8px;
   width: 70px;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-left: 8px;
 }
 #manual-ovg-input input:focus {
   border-color: #4a90e2;
   box-shadow: 0 0 0 2px #e3f0fc;
 }
+#ovg-popup-content .ovg-explanation {
+  color: #357abd;
+  font-size: 1.01rem;
+  font-style: italic;
+  text-align: center;
+  margin: 10px 0 0 0;
+  min-height: 22px;
+}
 #ovg-popup-content .footer_outcome {
   background: #f7fafd;
-  border-radius: 0 0 18px 18px;
-  margin-top: 18px;
-  padding: 18px 18px 10px 18px;
+  border-radius: 0 0 20px 20px;
+  margin-top: 24px;
+  padding: 22px 22px 10px 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+#ovg-popup-content .footer_outcome .results-title {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #232b36;
+  text-align: center;
+  margin-bottom: 16px;
 }
 #ovg-popup-content .footer_outcome .input-box {
   background: transparent;
@@ -318,33 +369,55 @@
   font-size: 0.92rem;
   font-weight: 500;
 }
+#ovg-popup-content .footer_outcome .ovg-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.08rem;
+  margin-bottom: 6px;
+}
+#ovg-popup-content .footer_outcome .ovg-result-row .ovg-result-label {
+  color: #232b36;
+  font-weight: 500;
+}
+#ovg-popup-content .footer_outcome .ovg-result-row .ovg-result-value {
+  color: #e14b4b;
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+#ovg-popup-content .footer_outcome .ovg-result-row.total {
+  border-top: 1px solid #e0e7ef;
+  padding-top: 8px;
+  margin-top: 10px;
+}
 #ovg-popup-content .btn-calculator, #ovg-popup-content .btn-calculator:active, #ovg-popup-content .btn-calculator:focus {
   width: 100%;
   background: #4a90e2;
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 12px 0;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 12px;
+  border-radius: 12px;
+  padding: 16px 0;
+  font-size: 1.13rem;
+  font-weight: 700;
+  margin-top: 18px;
   margin-bottom: 0;
   box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
   transition: background 0.2s;
+  text-align: center;
 }
 #ovg-popup-content .btn-calculator:hover {
   background: #357abd;
 }
 @media (max-width: 600px) {
   #ovg-popup-content {
-    max-width: 98vw;
-    border-radius: 12px;
+    max-width: 99vw;
+    border-radius: 14px;
   }
-  #ovg-popup-content .popup-header, #ovg-popup-content .bg-blue {
-    border-radius: 12px 12px 0 0;
+  #ovg-popup-content .popup-header {
+    border-radius: 14px 14px 0 0;
   }
   #ovg-popup-content .footer_outcome {
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 0 14px 14px;
   }
 }
 
