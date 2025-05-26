@@ -833,220 +833,69 @@
                       transition: 0.4s;
                       z-index: 999;
                     }
-                    #ovg-popup-content {
-                      background: #fff;
-                      padding: 20px;
-                      border: 1px solid #163155;
-                      position: relative;
-                      overflow-y: scroll;
-                      max-height: 85%;
-                      margin: 10px;
-                      width:100%;
-                      max-width:600px;
-                    }
-                    #ovg-popup.ovg-popup-open {
-                      display:flex;
-                    }
-                    #ovg-popup-close {
-                        max-width: 40px;
-                        background-color: #143055;
-                        height: 40px;
-                        border-radius: 50px;
-                        padding: 10px;
-                        box-shadow: #959da533 0 8px 24px;
-                        position: absolute;
-                        right: 5px;
-                        top: 5px;
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                    }
-                    #ovg-popup-close svg {
-                        width: 24px;
-                        height: 24px;
-                        margin-left: auto;
-                        stroke-width: 4px;
-                        stroke: #fff !important;
-                    }
-                    #overage-submit {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        z-index: 11;
-                    }
-                    #ovg-popup .input-box input {
-                        text-align: center;
-                        border: none;
-                        margin-bottom: 0;
-                        width: 100%;
-                        padding: 10px 5px;
-                    }
-                    span#ovg-total_square {
-                        margin: 0 5px;
-                    }
-                    #atc-btn-wrap {
-                      position:relative;
-                    }
-                    #ovg-overage-selectors {
-                        display: flex;
-                        flex-wrap: wrap;
-                        column-gap: 2rem;
-                        row-gap: .5rem;
-                        margin: .5rem 0;
-                    }
-                    #manualInputFieldOVG {
-                        border: 1px solid #CCC;
-                        padding: 4px;
-                        width: 100px;
-                        margin: 0 auto .5rem auto;
-                    }
-                    </style>
-                    <div id="ovg-popup">
-                      <div id="ovg-popup-content">
-                        <div id="ovg-popup-close">
-                          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000">
-                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><line x1="16" y1="16" x2="48" y2="48"></line><line x1="48" y1="16" x2="16" y2="48"></line></g>
-                          </svg>
+                    #ovg-popup.ovg-popup-open { display: flex; }
+                  </style>
+                  <div id="ovg-popup">
+                    <div id="ovg-popup-content" class="bg-white rounded-xl shadow-lg overflow-hidden max-w-[340px] w-full">
+                      <div class="bg-[#4a90e2] text-white p-3 flex flex-col items-center">
+                        <div class="flex justify-between items-center w-full">
+                          <h1 class="text-lg font-semibold text-center w-full">Overage Calculator</h1>
+                          <div class="flex gap-2">
+                            <span id="ovg-reset" class="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" role="button" aria-label="Reset calculator">&#8635;</span>
+                            <span id="ovg-popup-close" class="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" role="button" aria-label="Close calculator">&#10005;</span>
+                          </div>
                         </div>
-                        <div class="heading">
-                          <span>Overage Calculator</span>
-                        </div>
-                        <div class="section-intro">
-                          <h4>Don't forget to add the overage!</h4>
-                          <p>You will need for cuts, waste, breaks, and future repairs.</p>
-                        </div>
-                            <div class="flex-box">
-                              <div class="input-box">
-                                <input
-                                  type="text"
-                                  name="ovg-calculator-footage"
-                                  id="ovg-calculator-footage"
-                                  class="required-entry validate-digits"
-                                  placeholder="0"
-                                >
-                                <span class="input-label">Sq. Ft.</span>
-                              </div>
+                        <p class="text-sm text-gray-100 mt-0.5 text-center">Add overage for cuts, waste, breaks, and repairs</p>
+                      </div>
+                      <div class="p-3 space-y-3">
+                        <div>
+                          <div class="relative">
+                            <input type="number" id="ovg-calculator-footage" class="w-full p-2.5 border rounded-lg outline-none transition-all text-center text-lg" min="0" step="0.01" placeholder="Enter square feet" />
+                            <div class="absolute inset-x-0 bottom-0 text-center text-gray-500 text-xs translate-y-5">Square Feet</div>
+                            <div id="ovg-error" class="absolute inset-x-0 -bottom-4 text-center text-red-500 text-xs" style="display:none;"></div>
+                          </div>
+                          <div class="pt-6">
+                            <label class="font-semibold text-gray-800 mb-1.5 block text-base text-center">Overage Amount</label>
+                            <div class="grid grid-cols-2 gap-1.5" id="ovg-overage-selectors">
+                              <label><input type="radio" name="properties[OVERAGE]" value="0.10" checked /> 10%</label>
+                              <label><input type="radio" name="properties[OVERAGE]" value="0.15" /> 15%</label>
+                              <label><input type="radio" name="properties[OVERAGE]" value="manual" id="ovg-manualInputRadio" /> Manual Input</label>
+                              <label><input type="radio" name="properties[OVERAGE]" value="no_overage" /> No Overage</label>
                             </div>
-                            <h4>Overage Amount</h4>
-                        <!--
-                            <select id="ovg-overage" name="properties[OVERAGE]">
-                              <option value="nan">Overage</option>
-                              <option value=".05">5%</option>
-                              <option value=".10">10%</option>
-                              <option value=".15">15%</option>
-                              <option value=".20">20%</option>
-                              <option value=".25">25%</option>
-                              <option value=".30">30%</option>
-                            </select>
-                    -->
-                            <div id="ovg-overage">
-                              <div id="ovg-overage-selectors">
-                              <label>
-                                <input type="radio" name="properties[OVERAGE]" value="0.10" checked> 10%
-                              </label>
-                              <label>
-                                <input type="radio" name="properties[OVERAGE]" value="0.15"> 15%
-                              </label>
-                              <label>
-                                <input type="radio" name="properties[OVERAGE]" value="manual" id="ovg-manualInputRadio"> Manual Input
-                              </label>
-                              <label>
-                                <input type="radio" name="properties[OVERAGE]" value="no_overage"> No Overage
-                              </label>
-                              </div>
-                              <div id="manual-ovg-input" style="display: none;">
-                              <input type="number" id="manualInputFieldOVG" name="properties[OVERAGE_MANUAL]" placeholder="Enter %" step="1" min="0"> %
-                              </div>
-                            </div>
-                            <script>
-                              document.querySelectorAll('#ovg-overage input[name="properties[OVERAGE]"]').forEach(radio => {
-                                radio.addEventListener('change', function () {
-                                  const manualInputFieldOVG = document.querySelector('#ovg-overage #manual-ovg-input');
-                                  if (this.value === 'manual') {
-                                    manualInputFieldOVG.style.display = 'inline-block';
-                                    manualInputFieldOVG.focus();
-                                  } else {
-                                    manualInputFieldOVG.style.display = 'none';
-                                  }
-                                  // Auto-calculate when overage option changes
-                                  calculateOverage();
-                                });
-                              });
-                            </script>
-                            <a href="#" class="calculate_btn" id="ovg-calculate" style="display:none;">Calculate</a>
-
-                        
-                       <div class="footer_outcome">
-                            <div class="calculator-section line-separator">
-                              <span class="separator">Outcome</span>
-                            </div>
-                            <div class="flex-box">
-                              <div class="input-box box-half" novalidate="novalidate">
-                                <input
-                                  type="text"
-                                  class="solution_input form-control"
-                                  disabled="disabled"
-                                  id="ovg-solution"
-                                  placeholder="0"
-                                >
-                                <span class="input-label">Sq. Ft.</span>
-                              </div>
-                              <div class="input-box box-half" novalidate="novalidate">
-                                <input
-                                  type="text"
-                                  class="solution_input form-control"
-                                  disabled="disabled"
-                                  id="ovg-total_coverage"
-                                  placeholder="0"
-                                >
-                                <span class="input-label">Total Coverage Sq. Ft.</span>
-                              </div>
-                            </div>
-                            <div class="flex-box">
-                              <div class="input-box box-half" novalidate="novalidate">
-                                <input
-                                  type="text"
-                                  class="solution_input form-control"
-                                  disabled="disabled"
-                                  id="ovg-boxes"
-                                  placeholder="0"
-                                >
-                                <span class="input-label">
-                                  {% if product.metafields.measuringunitsatd.measuring_units_atd == "Box" %}
-                                    {{ product.metafields.measuringunitsatd.measuring_units_atd }}es
-                                  {% elsif product.metafields.measuringunitsatd.measuring_units_atd == "Sheet" %}
-                                    {{ product.metafields.measuringunitsatd.measuring_units_atd }}s
-                                  {% elsif product.metafields.measuringunitsatd.measuring_units_atd == "Piece" %}
-                                    {{ product.metafields.measuringunitsatd.measuring_units_atd }}s
-                                  {% else %}
-                                    {{ product.metafields.measuringunitsatd.measuring_units_atd }}
-                                  {% endif %}
-                                </span>
-                              </div>
-                              <div class="input-box box-half" novalidate="novalidate">
-                                <input
-                                  type="text"
-                                  class="solution_input form-control"
-                                  disabled="disabled"
-                                  id="ovg-total_cost"
-                                  placeholder="0"
-                                >
-                                <span class="input-label">Total Price</span>
-                              </div>
+                            <div class="mt-2 text-center text-sm text-blue-600 italic" id="ovg-explanation"></div>
+                            <div id="manual-ovg-input" class="mt-2 flex items-center justify-center" style="display:none;">
+                              <input type="number" id="manualInputFieldOVG" class="w-20 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4a90e2] focus:border-[#4a90e2] outline-none transition-all text-center" min="0" max="100" placeholder="%" />
+                              <span class="ml-2 text-gray-700">%</span>
                             </div>
                           </div>
-
-                          <div class="calculator-section actions">
-                            <button id="ovg-addToquanitity" class="btn-calculator">
-                              <span id="ovg-addToCartquanitity">Add To Cart</span>
-                            </button>
+                        </div>
+                        <div class="mt-4 bg-gray-50 rounded-lg p-3 relative group">
+                          <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-base font-semibold text-gray-800 w-full text-center">Calculation Results</h2>
                           </div>
-                        
+                          <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                              <span class="text-gray-600 text-sm">Overage:</span>
+                              <span class="font-medium text-red-500 transition-all" id="ovg-overage-value">0.00 Sq. Ft.</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600 text-sm">Total:</span>
+                              <span class="font-medium text-red-500 transition-all" id="ovg-total-coverage-value">0.00 Sq. Ft.</span>
+                            </div>
+                            <div class="flex justify-between">
+                              <span class="text-gray-600 text-sm">Boxes Needed:</span>
+                              <span class="font-medium text-red-500 transition-all" id="ovg-boxes-value">0</span>
+                            </div>
+                            <div class="flex justify-between pt-1.5 border-t border-gray-200">
+                              <span class="text-gray-600 text-sm">Total Price:</span>
+                              <span class="text-base font-bold text-red-500 transition-all" id="ovg-total-price-value">$0.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <button class="w-full bg-[#4a90e2] text-white py-2 rounded-lg font-medium hover:bg-[#357abd] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" id="ovg-addToquanitity">Add To Cart</button>
                       </div>
                     </div>
-
+                  </div>
                   {% endif %}
                 
                   <style>
