@@ -1594,6 +1594,14 @@
       calculateOverage();
     });
   });
+
+  // When opening the overage popup, copy the main calculator's square feet value
+  $('.open_calc_pop_up, #overage-submit').on('click', function() {
+    var mainSqft = $('#squared_size').val();
+    if (mainSqft) {
+      $('#ovg-calculator-footage').val(mainSqft).trigger('input');
+    }
+  });
 </script>
 
                 
