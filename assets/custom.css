@@ -189,125 +189,135 @@
 }
 #ovg-popup-content {
   background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(74, 144, 226, 0.13), 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 18px;
+  border: 1.5px solid #bfc7d1;
+  box-shadow: 0 4px 24px rgba(32, 74, 128, 0.10);
   padding: 0;
-  max-width: 370px;
+  max-width: 420px;
   width: 100%;
   overflow: hidden;
-  font-family: inherit;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 #ovg-popup-content .popup-header {
-  background: #4a90e2;
-  color: #fff;
-  padding: 22px 22px 8px 22px;
+  background: #f7fafd;
+  color: #204a80;
+  padding: 32px 32px 8px 32px;
   text-align: center;
-  font-size: 1.45rem;
+  font-size: 2rem;
   font-weight: 700;
-  border-radius: 20px 20px 0 0;
+  border-radius: 18px 18px 0 0;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
   letter-spacing: 0.01em;
+  border-bottom: none;
 }
 #ovg-popup-content .popup-header p {
-  color: #eaf2fb;
-  font-size: 1.05rem;
+  color: #204a80;
+  font-size: 1.1rem;
   font-weight: 400;
-  margin-top: 4px;
+  margin-top: 8px;
   margin-bottom: 0;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #ovg-popup-close {
   position: absolute;
   top: 18px;
   right: 18px;
-  background: transparent;
+  background: #204a80;
   color: #fff;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 2;
+  border: none;
 }
 #ovg-popup-close svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   stroke: #fff !important;
 }
 #ovg-popup-content .input-section {
   width: 100%;
-  padding: 24px 24px 0 24px;
+  padding: 18px 32px 0 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 #ovg-popup-content .input-box input {
-  border: 1.5px solid #e0e7ef;
-  border-radius: 14px;
+  border: 1.5px solid #bfc7d1;
+  border-radius: 8px;
   padding: 18px 8px;
-  font-size: 2rem;
+  font-size: 2.2rem;
   text-align: center;
   width: 100%;
   outline: none;
   background: #fff;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
   font-weight: 500;
   margin-bottom: 0;
   transition: border 0.2s, box-shadow 0.2s;
 }
 #ovg-popup-content .input-box input:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px #e3f0fc;
+  border-color: #204a80;
+  box-shadow: 0 0 0 2px #e3eafc;
 }
 #ovg-popup-content .input-label {
-  color: #7b8591;
-  font-size: 1.05rem;
+  color: #bfc7d1;
+  font-size: 1.1rem;
   text-align: center;
   margin-top: 6px;
   margin-bottom: 0;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #ovg-popup-content .overage-label {
   font-weight: 700;
-  font-size: 1.18rem;
-  color: #232b36;
+  font-size: 1.25rem;
+  color: #204a80;
   margin: 24px 0 10px 0;
   text-align: center;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #ovg-overage-selectors {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
   margin-bottom: 0;
   width: 100%;
+  justify-content: center;
 }
 #ovg-overage-selectors label {
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
-  border: 1.5px solid #e0e7ef;
+  border: 1.5px solid #bfc7d1;
   border-radius: 999px;
-  padding: 12px 0;
-  font-size: 1.08rem;
-  color: #232b36;
+  padding: 8px 22px;
+  font-size: 1.1rem;
+  color: #204a80;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, border 0.2s, color 0.2s;
   text-align: center;
   min-width: 0;
   min-height: 0;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #ovg-overage-selectors input[type="radio"] {
-  accent-color: #4a90e2;
+  accent-color: #204a80;
   margin-right: 8px;
 }
 #ovg-overage-selectors input[type="radio"]:checked + label,
 #ovg-overage-selectors label:has(input[type="radio"]:checked) {
-  background: #4a90e2;
+  background: #204a80;
   color: #fff;
-  border-color: #4a90e2;
+  border-color: #204a80;
 }
 #manual-ovg-input {
   display: flex;
@@ -316,108 +326,119 @@
   margin-top: 10px;
 }
 #manual-ovg-input input {
-  border: 1.5px solid #e0e7ef;
-  border-radius: 10px;
+  border: 1.5px solid #bfc7d1;
+  border-radius: 8px;
   padding: 10px 8px;
   width: 70px;
   text-align: center;
   font-size: 1.1rem;
   margin-left: 8px;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #manual-ovg-input input:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px #e3f0fc;
+  border-color: #204a80;
+  box-shadow: 0 0 0 2px #e3eafc;
 }
 #ovg-popup-content .ovg-explanation {
-  color: #357abd;
-  font-size: 1.01rem;
+  color: #204a80;
+  font-size: 1.05rem;
   font-style: italic;
   text-align: center;
   margin: 10px 0 0 0;
   min-height: 22px;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
 #ovg-popup-content .footer_outcome {
   background: #f7fafd;
-  border-radius: 0 0 20px 20px;
-  margin-top: 24px;
-  padding: 22px 22px 10px 22px;
+  border-radius: 0 0 18px 18px;
+  margin-top: 32px;
+  padding: 0 0 0 0;
   width: 100%;
   box-sizing: border-box;
+  border-top: 1.5px solid #bfc7d1;
 }
-#ovg-popup-content .footer_outcome .results-title {
-  font-size: 1.18rem;
-  font-weight: 700;
-  color: #232b36;
-  text-align: center;
-  margin-bottom: 16px;
-}
-#ovg-popup-content .footer_outcome .input-box {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-#ovg-popup-content .footer_outcome .input-box input {
+#ovg-popup-content .footer_outcome .outcome-label {
+  display: block;
+  margin: 0 auto -18px auto;
   background: #fff;
-  border: 1.5px solid #e0e7ef;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #143055;
+  color: #204a80;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
+  font-size: 1.1rem;
   font-weight: 600;
+  padding: 2px 18px;
+  border-radius: 8px;
+  position: relative;
+  top: -14px;
+  width: fit-content;
+  border: 1.5px solid #bfc7d1;
+  z-index: 1;
+  text-align: center;
 }
-#ovg-popup-content .footer_outcome .input-label {
-  color: #4a90e2;
-  font-size: 0.92rem;
-  font-weight: 500;
+#ovg-popup-content .footer_outcome .outcome-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 18px;
+  padding: 32px 32px 24px 32px;
+  background: #f7fafd;
+  border-radius: 0 0 18px 18px;
 }
-#ovg-popup-content .footer_outcome .ovg-result-row {
+#ovg-popup-content .footer_outcome .outcome-grid .outcome-cell {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  font-size: 1.08rem;
-  margin-bottom: 6px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1.5px solid #e3eafc;
+  padding: 12px 0 8px 0;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
 }
-#ovg-popup-content .footer_outcome .ovg-result-row .ovg-result-label {
-  color: #232b36;
-  font-weight: 500;
+#ovg-popup-content .footer_outcome .outcome-grid .outcome-value {
+  font-size: 1.3rem;
+  color: #204a80;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
-#ovg-popup-content .footer_outcome .ovg-result-row .ovg-result-value {
-  color: #e14b4b;
-  font-weight: 700;
-  font-size: 1.08rem;
+#ovg-popup-content .footer_outcome .outcome-grid .outcome-label {
+  font-size: 1rem;
+  color: #bfc7d1;
+  font-weight: 400;
+  margin-bottom: 0;
 }
-#ovg-popup-content .footer_outcome .ovg-result-row.total {
-  border-top: 1px solid #e0e7ef;
-  padding-top: 8px;
-  margin-top: 10px;
+#ovg-popup-content .footer_outcome .outcome-grid .outcome-value.price {
+  color: #204a80;
 }
 #ovg-popup-content .btn-calculator, #ovg-popup-content .btn-calculator:active, #ovg-popup-content .btn-calculator:focus {
-  width: 100%;
-  background: #4a90e2;
+  width: 90%;
+  background: #204a80;
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px 0;
-  font-size: 1.13rem;
+  font-size: 1.25rem;
+  font-family: 'Georgia', Times, 'Times New Roman', serif;
   font-weight: 700;
-  margin-top: 18px;
-  margin-bottom: 0;
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
+  margin: 24px auto 24px auto;
+  box-shadow: 0 2px 8px rgba(32, 74, 128, 0.08);
   transition: background 0.2s;
   text-align: center;
+  display: block;
 }
 #ovg-popup-content .btn-calculator:hover {
-  background: #357abd;
+  background: #143055;
 }
 @media (max-width: 600px) {
   #ovg-popup-content {
     max-width: 99vw;
-    border-radius: 14px;
+    border-radius: 12px;
   }
   #ovg-popup-content .popup-header {
-    border-radius: 14px 14px 0 0;
+    border-radius: 12px 12px 0 0;
   }
   #ovg-popup-content .footer_outcome {
-    border-radius: 0 0 14px 14px;
+    border-radius: 0 0 12px 12px;
+  }
+  #ovg-popup-content .footer_outcome .outcome-grid {
+    padding: 18px 8px 12px 8px;
   }
 }
 
