@@ -834,65 +834,187 @@
                       z-index: 999;
                     }
                     #ovg-popup.ovg-popup-open { display: flex; }
+                    #ovg-popup-content {
+                      border-radius: 16px;
+                      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+                      background: #fff;
+                      overflow: hidden;
+                      max-width: 370px;
+                      width: 100%;
+                    }
+                    #ovg-popup-content .header {
+                      background: #6699e6;
+                      color: #fff;
+                      padding: 24px 16px 12px 16px;
+                      border-top-left-radius: 16px;
+                      border-top-right-radius: 16px;
+                      text-align: center;
+                    }
+                    #ovg-popup-content .subtitle {
+                      color: #eaf1fb;
+                      font-size: 15px;
+                      margin-top: 4px;
+                    }
+                    #ovg-popup-content input[type="number"] {
+                      width: 100%;
+                      font-size: 2rem;
+                      text-align: center;
+                      border: 1.5px solid #d1d5db;
+                      border-radius: 12px;
+                      padding: 18px 0;
+                      margin-bottom: 0;
+                      background: #fff;
+                    }
+                    #ovg-popup-content .input-label {
+                      color: #6b7280;
+                      font-size: 1rem;
+                      margin-top: 8px;
+                      text-align: center;
+                      display: block;
+                    }
+                    #ovg-overage-selectors {
+                      display: flex;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                      margin-top: 10px;
+                      margin-bottom: 0;
+                    }
+                    #ovg-overage-selectors input[type="radio"] {
+                      display: none;
+                    }
+                    #ovg-overage-selectors label {
+                      flex: 1 1 45%;
+                      text-align: center;
+                      border: 2px solid #6699e6;
+                      border-radius: 12px;
+                      padding: 10px 0;
+                      font-weight: 600;
+                      color: #6699e6;
+                      background: #fff;
+                      cursor: pointer;
+                      transition: all 0.2s;
+                      font-size: 1.1rem;
+                      margin: 0;
+                    }
+                    #ovg-overage-selectors input[type="radio"]:checked + label {
+                      background: #6699e6;
+                      color: #fff;
+                      border-color: #6699e6;
+                    }
+                    #ovg-popup-content .explanation {
+                      color: #3366cc;
+                      font-style: italic;
+                      text-align: center;
+                      margin-top: 8px;
+                    }
+                    #manual-ovg-input {
+                      margin-top: 10px;
+                    }
+                    #ovg-popup-content .results-box {
+                      background: #fff;
+                      border: 1.5px solid #e5e7eb;
+                      border-radius: 12px;
+                      padding: 18px;
+                      margin-top: 18px;
+                    }
+                    #ovg-popup-content .results-box .result-label {
+                      color: #374151;
+                      font-weight: 500;
+                      font-size: 1.05rem;
+                    }
+                    #ovg-popup-content .results-box .result-value {
+                      color: #e53e3e;
+                      font-weight: 700;
+                      font-size: 1.1rem;
+                    }
+                    #ovg-popup-content .results-box .divider {
+                      border-top: 1.5px solid #e5e7eb;
+                      margin: 12px 0 8px 0;
+                    }
+                    #ovg-popup-content .add-to-cart-btn {
+                      width: 100%;
+                      background: #6699e6;
+                      color: #fff;
+                      border-radius: 12px;
+                      padding: 16px 0;
+                      font-size: 1.1rem;
+                      font-weight: 600;
+                      margin-top: 18px;
+                      border: none;
+                      cursor: pointer;
+                      transition: background 0.2s;
+                    }
+                    #ovg-popup-content .add-to-cart-btn:hover {
+                      background: #3366cc;
+                    }
+                    #ovg-popup-content .header .icon-btn {
+                      background: none;
+                      border: none;
+                      color: #fff;
+                      font-size: 1.5rem;
+                      cursor: pointer;
+                      margin-left: 10px;
+                      margin-right: 0;
+                      padding: 0;
+                    }
                   </style>
                   <div id="ovg-popup">
-                    <div id="ovg-popup-content" class="bg-white rounded-xl shadow-lg overflow-hidden max-w-[340px] w-full">
-                      <div class="bg-[#4a90e2] text-white p-3 flex flex-col items-center">
-                        <div class="flex justify-between items-center w-full">
-                          <h1 class="text-lg font-semibold text-center w-full">Overage Calculator</h1>
-                          <div class="flex gap-2">
-                            <span id="ovg-reset" class="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" role="button" aria-label="Reset calculator">&#8635;</span>
-                            <span id="ovg-popup-close" class="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" role="button" aria-label="Close calculator">&#10005;</span>
-                          </div>
+                    <div id="ovg-popup-content">
+                      <div class="header">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                          <span style="flex:1; text-align:center; font-size:1.5rem; font-weight:700;">Overage Calculator</span>
+                          <span>
+                            <button id="ovg-reset" class="icon-btn" title="Reset">&#8635;</button>
+                            <button id="ovg-popup-close" class="icon-btn" title="Close">&#10005;</button>
+                          </span>
                         </div>
-                        <p class="text-sm text-gray-100 mt-0.5 text-center">Add overage for cuts, waste, breaks, and repairs</p>
+                        <div class="subtitle">Add overage for cuts, waste, breaks, and repairs</div>
                       </div>
-                      <div class="p-3 space-y-3">
+                      <div style="padding: 24px 18px 0 18px;">
                         <div>
-                          <div class="relative">
-                            <input type="number" id="ovg-calculator-footage" class="w-full p-2.5 border rounded-lg outline-none transition-all text-center text-lg" min="0" step="0.01" placeholder="Enter square feet" />
-                            <div class="absolute inset-x-0 bottom-0 text-center text-gray-500 text-xs translate-y-5">Square Feet</div>
-                            <div id="ovg-error" class="absolute inset-x-0 -bottom-4 text-center text-red-500 text-xs" style="display:none;"></div>
+                          <input type="number" id="ovg-calculator-footage" min="0" step="0.01" placeholder="Enter square feet" />
+                          <div class="input-label">Square Feet</div>
+                          <div id="ovg-error" class="input-label" style="color:#e53e3e; display:none;"></div>
+                        </div>
+                        <div style="margin-top: 28px;">
+                          <div style="font-weight:700; color:#222; font-size:1.15rem; text-align:center; margin-bottom:10px;">Overage Amount</div>
+                          <div id="ovg-overage-selectors">
+                            <input type="radio" id="ovg-10" name="properties[OVERAGE]" value="0.10" checked />
+                            <label for="ovg-10">10%</label>
+                            <input type="radio" id="ovg-15" name="properties[OVERAGE]" value="0.15" />
+                            <label for="ovg-15">15%</label>
+                            <input type="radio" id="ovg-manualInputRadio" name="properties[OVERAGE]" value="manual" />
+                            <label for="ovg-manualInputRadio">Manual Input</label>
+                            <input type="radio" id="ovg-noOverage" name="properties[OVERAGE]" value="no_overage" />
+                            <label for="ovg-noOverage">No Overage</label>
                           </div>
-                          <div class="pt-6">
-                            <label class="font-semibold text-gray-800 mb-1.5 block text-base text-center">Overage Amount</label>
-                            <div class="grid grid-cols-2 gap-1.5" id="ovg-overage-selectors">
-                              <label><input type="radio" name="properties[OVERAGE]" value="0.10" checked /> 10%</label>
-                              <label><input type="radio" name="properties[OVERAGE]" value="0.15" /> 15%</label>
-                              <label><input type="radio" name="properties[OVERAGE]" value="manual" id="ovg-manualInputRadio" /> Manual Input</label>
-                              <label><input type="radio" name="properties[OVERAGE]" value="no_overage" /> No Overage</label>
-                            </div>
-                            <div class="mt-2 text-center text-sm text-blue-600 italic" id="ovg-explanation"></div>
-                            <div id="manual-ovg-input" class="mt-2 flex items-center justify-center" style="display:none;">
-                              <input type="number" id="manualInputFieldOVG" class="w-20 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4a90e2] focus:border-[#4a90e2] outline-none transition-all text-center" min="0" max="100" placeholder="%" />
-                              <span class="ml-2 text-gray-700">%</span>
-                            </div>
+                          <div class="explanation" id="ovg-explanation">Recommended for most applications</div>
+                          <div id="manual-ovg-input" class="mt-2 flex items-center justify-center" style="display:none;">
+                            <input type="number" id="manualInputFieldOVG" min="0" max="100" placeholder="%" style="width: 70px; margin-right: 8px;" />
+                            <span style="color:#374151;">%</span>
                           </div>
                         </div>
-                        <div class="mt-4 bg-gray-50 rounded-lg p-3 relative group">
-                          <div class="flex justify-between items-center mb-2">
-                            <h2 class="text-base font-semibold text-gray-800 w-full text-center">Calculation Results</h2>
+                        <div class="results-box">
+                          <div style="font-weight:700; color:#222; font-size:1.1rem; text-align:center; margin-bottom:10px;">Calculation Results</div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span class="result-label">Overage:</span>
+                            <span class="result-value" id="ovg-overage-value">0.00 Sq. Ft.</span>
                           </div>
-                          <div class="space-y-1.5">
-                            <div class="flex justify-between">
-                              <span class="text-gray-600 text-sm">Overage:</span>
-                              <span class="font-medium text-red-500 transition-all" id="ovg-overage-value">0.00 Sq. Ft.</span>
-                            </div>
-                            <div class="flex justify-between">
-                              <span class="text-gray-600 text-sm">Total:</span>
-                              <span class="font-medium text-red-500 transition-all" id="ovg-total-coverage-value">0.00 Sq. Ft.</span>
-                            </div>
-                            <div class="flex justify-between">
-                              <span class="text-gray-600 text-sm">Boxes Needed:</span>
-                              <span class="font-medium text-red-500 transition-all" id="ovg-boxes-value">0</span>
-                            </div>
-                            <div class="flex justify-between pt-1.5 border-t border-gray-200">
-                              <span class="text-gray-600 text-sm">Total Price:</span>
-                              <span class="text-base font-bold text-red-500 transition-all" id="ovg-total-price-value">$0.00</span>
-                            </div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span class="result-label">Total:</span>
+                            <span class="result-value" id="ovg-total-coverage-value">0.00 Sq. Ft.</span>
+                          </div>
+                          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span class="result-label">Boxes Needed:</span>
+                            <span class="result-value" id="ovg-boxes-value">0</span>
+                          </div>
+                          <div class="divider"></div>
+                          <div style="display:flex; justify-content:space-between;">
+                            <span class="result-label">Total Price:</span>
+                            <span class="result-value" id="ovg-total-price-value">$0.00</span>
                           </div>
                         </div>
-                        <button class="w-full bg-[#4a90e2] text-white py-2 rounded-lg font-medium hover:bg-[#357abd] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" id="ovg-addToquanitity">Add To Cart</button>
+                        <button class="add-to-cart-btn" id="ovg-addToquanitity">Add To Cart</button>
                       </div>
                     </div>
                   </div>
