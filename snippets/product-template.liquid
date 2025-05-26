@@ -914,7 +914,7 @@
                           <span>Overage Calculator</span>
                         </div>
                         <div class="section-intro">
-                          <h4>Don’t forget to add the overage!</h4>
+                          <h4>Don't forget to add the overage!</h4>
                           <p>You will need for cuts, waste, breaks, and future repairs.</p>
                         </div>
                             <div class="flex-box">
@@ -970,10 +970,12 @@
                                   } else {
                                     manualInputFieldOVG.style.display = 'none';
                                   }
+                                  // Auto-calculate when overage option changes
+                                  calculateOverage();
                                 });
                               });
                             </script>
-                            <a href="#" class="calculate_btn" id="ovg-calculate">Calculate</a>
+                            <a href="#" class="calculate_btn" id="ovg-calculate" style="display:none;">Calculate</a>
 
                         
                        <div class="footer_outcome">
