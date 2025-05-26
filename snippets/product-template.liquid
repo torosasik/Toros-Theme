@@ -1609,15 +1609,15 @@
     {% endif %}
 
     console.log("All event listeners and functions set up.");
-  });
 
-  // Auto-calculate when the square footage input changes
-  $('#ovg-calculator-footage').on('input', function() {
-    calculateOverage();
-  });
-  // Auto-calculate when the manual overage input changes
-  $('#manualInputFieldOVG').on('input', function() {
-    calculateOverage();
+    // Auto-calculate when the square footage input changes
+    $('#ovg-calculator-footage').on('input', function() {
+      calculateOverage();
+    });
+    // Auto-calculate when the manual overage input changes
+    $('#manualInputFieldOVG').on('input', function() {
+      calculateOverage();
+    });
   });
 </script>
 
