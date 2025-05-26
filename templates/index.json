@@ -9,70 +9,6 @@
  */
 {
   "sections": {
-    "toros_swiper_8emQBp": {
-      "type": "Toros-Swiper",
-      "blocks": {
-        "collection_slide_yUB497": {
-          "type": "collection_slide",
-          "settings": {
-            "collection_url": "shopify://collections/accessories-multi-color",
-            "collection_image": "shopify://shop_images/34_4160e168-00b2-4e2e-8874-31c01e01920a.png",
-            "collection_label": "",
-            "button_text": "",
-            "button_url": ""
-          }
-        },
-        "collection_slide_m3FFYp": {
-          "type": "collection_slide",
-          "settings": {
-            "collection_url": "",
-            "collection_image": "shopify://shop_images/48x48-Ravello-Azzurro-Polished-Stone-Look-Porcelain-Tile-1.jpg",
-            "collection_label": "",
-            "button_text": "",
-            "button_url": ""
-          }
-        },
-        "collection_slide_7RMdVT": {
-          "type": "collection_slide",
-          "settings": {
-            "collection_url": "",
-            "collection_image": "shopify://shop_images/TrinityRoomScene-S.png",
-            "collection_label": "",
-            "button_text": "",
-            "button_url": ""
-          }
-        },
-        "collection_slide_fC6kwk": {
-          "type": "collection_slide",
-          "settings": {
-            "collection_url": "",
-            "collection_image": "shopify://shop_images/broadmoor-elongated-hexagon-ocean-blue-glossy-mosaic-porcelain-wall-tile-3.jpg",
-            "collection_label": "",
-            "button_text": "",
-            "button_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_slide_yUB497",
-        "collection_slide_m3FFYp",
-        "collection_slide_7RMdVT",
-        "collection_slide_fC6kwk"
-      ],
-      "name": "Toros Swiper",
-      "settings": {
-        "slides_per_view": 3,
-        "slide_gap": 0,
-        "slide_radius": 0,
-        "slide_shadow_color": "#000000",
-        "slide_shadow_opacity": 21,
-        "card_aspect_ratio": "square",
-        "button_bg": "#1C4170",
-        "button_color": "#ffffff",
-        "button_hover_color": "#ffffff",
-        "button_radius": 0
-      }
-    },
     "ss_slider_2_FiNagK": {
       "type": "ss-slider-2",
       "blocks": {
@@ -1206,7 +1142,6 @@
     }
   },
   "order": [
-    "toros_swiper_8emQBp",
     "ss_slider_2_FiNagK",
     "featured_collection_iYY6E7",
     "collection_list_Gi6pye",
